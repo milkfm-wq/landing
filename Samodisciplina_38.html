@@ -1,0 +1,1224 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Школа самодисциплины: Сказал, Сделал, Заработал! — Дашборд обратной связи</title>
+  <style>
+    :root {
+      --bg: #f4efe7;
+      --bg-soft: #fbf7f1;
+      --paper: rgba(255, 252, 247, 0.78);
+      --line: rgba(42, 58, 63, 0.12);
+      --text: #1f2a2e;
+      --muted: #6e7a7c;
+      --teal: #1a7b78;
+      --teal-soft: #d9eeeb;
+      --sand: #d8c3aa;
+      --ink: #132023;
+      --warm: #b87847;
+      --danger: #a3544a;
+      --shadow: 0 20px 50px rgba(26, 34, 38, 0.08);
+      --radius: 28px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font-family: "Avenir Next", "Segoe UI", "Trebuchet MS", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(26, 123, 120, 0.12), transparent 34%),
+        radial-gradient(circle at 85% 12%, rgba(184, 120, 71, 0.14), transparent 22%),
+        linear-gradient(180deg, #f7f1e7 0%, #f3eee6 42%, #f7f5f2 100%);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(31, 42, 46, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(31, 42, 46, 0.025) 1px, transparent 1px);
+      background-size: 24px 24px;
+      mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.7), transparent 80%);
+    }
+
+    .shell {
+      width: min(1320px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 64px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 58fr) minmax(320px, 42fr);
+      grid-template-rows: 1fr auto;
+      gap: 18px 26px;
+      align-items: stretch;
+      min-height: calc(100svh - 12px);
+      padding: 12px 0 20px;
+    }
+
+    .hero-copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-self: center;
+      gap: 16px;
+      max-width: 720px;
+      padding: 0 4px 0;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      border: 1px solid rgba(26, 123, 120, 0.2);
+      border-radius: 999px;
+      background: rgba(255, 251, 245, 0.78);
+      color: var(--teal);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: "Avenir Next", "Segoe UI", "Trebuchet MS", sans-serif;
+      font-size: clamp(28px, 3.8vw, 52px);
+      line-height: 0.96;
+      letter-spacing: -0.05em;
+      color: var(--ink);
+      max-width: none;
+      text-wrap: balance;
+      overflow-wrap: anywhere;
+    }
+
+    h1 .line {
+      display: block;
+      white-space: nowrap;
+    }
+
+    .lead {
+      max-width: 30ch;
+      margin: 0;
+      font-size: clamp(18px, 1.8vw, 24px);
+      line-height: 1.34;
+      color: #384649;
+    }
+
+    .hero-note {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 18px;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .hero-note span {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hero-note span::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--sand);
+    }
+
+    .hero-aside {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-self: stretch;
+      padding: 28px;
+      border: 1px solid var(--line);
+      border-radius: 34px;
+      background:
+        linear-gradient(160deg, rgba(255, 255, 255, 0.78), rgba(255, 249, 241, 0.52)),
+        linear-gradient(180deg, rgba(26, 123, 120, 0.08), transparent 55%);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .hero-aside::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at top right, rgba(26, 123, 120, 0.18), transparent 34%),
+        radial-gradient(circle at left bottom, rgba(184, 120, 71, 0.14), transparent 28%);
+      pointer-events: none;
+    }
+
+    .stat-topline {
+      position: relative;
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .aside-divider {
+      width: 100%;
+      height: 1px;
+      background: rgba(31, 42, 46, 0.08);
+      margin: 4px 0;
+    }
+
+    .aside-lessons {
+      position: relative;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 0;
+    }
+
+    .aside-lessons .kicker {
+      margin: 0 0 12px;
+    }
+
+    .metric {
+      position: relative;
+      padding: 18px 16px 16px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.66);
+      border: 1px solid rgba(31, 42, 46, 0.08);
+      backdrop-filter: blur(10px);
+    }
+
+    .metric-value {
+      font-size: clamp(26px, 4vw, 42px);
+      line-height: 1;
+      letter-spacing: -0.04em;
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    .metric-label {
+      margin-top: 8px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .lesson-block {
+      position: relative;
+      z-index: 1;
+      margin-top: 22px;
+    }
+
+    .kicker {
+      margin: 0 0 10px;
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .lesson-row,
+    .bar-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px 14px;
+      align-items: center;
+      margin: 12px 0;
+    }
+
+    .lesson-label,
+    .bar-label {
+      font-size: 14px;
+      color: #304043;
+    }
+
+    .bar-track {
+      grid-column: 1 / -1;
+      height: 12px;
+      border-radius: 999px;
+      background: rgba(31, 42, 46, 0.08);
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      width: 0;
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--teal) 0%, #4fb9b2 100%);
+      transition: width 1.3s cubic-bezier(.2, .8, .2, 1);
+    }
+
+    .bar-fill.warm {
+      background: linear-gradient(90deg, var(--warm) 0%, #d6aa77 100%);
+    }
+
+    .bar-fill.danger {
+      background: linear-gradient(90deg, var(--danger) 0%, #d58f75 100%);
+    }
+
+    .bar-value,
+    .lesson-value {
+      font-size: 13px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .sticky-strip {
+      position: static;
+      grid-column: 1 / -1;
+      align-self: end;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1px;
+      margin: 0;
+      border: 1px solid rgba(31, 42, 46, 0.08);
+      border-radius: 22px;
+      overflow: hidden;
+      background: rgba(255, 253, 249, 0.72);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 10px 30px rgba(21, 30, 33, 0.07);
+    }
+
+    .sticky-item {
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.8);
+    }
+
+    .sticky-number {
+      display: block;
+      font-size: clamp(22px, 3vw, 34px);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      color: var(--ink);
+    }
+
+    .sticky-text {
+      display: block;
+      margin-top: 4px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .section {
+      display: grid;
+      grid-template-columns: minmax(240px, 300px) minmax(0, 1fr);
+      gap: 26px;
+      padding: 28px 0;
+      border-top: 1px solid rgba(31, 42, 46, 0.09);
+    }
+
+    .section-head {
+      position: sticky;
+      top: 104px;
+      align-self: start;
+    }
+
+    .section-index {
+      display: inline-block;
+      margin-bottom: 10px;
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .section h2 {
+      margin: 0 0 10px;
+      font-family: "Avenir Next", "Segoe UI", "Trebuchet MS", sans-serif;
+      font-size: clamp(24px, 3vw, 36px);
+      font-weight: 700;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+      text-wrap: balance;
+      overflow-wrap: anywhere;
+      hyphens: auto;
+    }
+
+    .section p {
+      margin: 0;
+      color: #526063;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .panel {
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .cluster-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .panel h3,
+    .voice h3 {
+      margin: 0 0 16px;
+      font-size: 24px;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+      text-wrap: balance;
+    }
+
+    .microcopy {
+      margin: -2px 0 18px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .signal-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .signal {
+      display: block;
+      padding: 0 0 16px;
+      border-bottom: 1px solid rgba(31, 42, 46, 0.08);
+    }
+
+    .signal:last-child {
+      padding-bottom: 0;
+      border-bottom: 0;
+    }
+
+    .signal strong {
+      display: block;
+      max-width: 34ch;
+      font-size: 15px;
+      line-height: 1.35;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      color: #204649;
+    }
+
+    .signal span {
+      display: block;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.48;
+    }
+
+    .dual-graph {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .score-wrap {
+      display: grid;
+      gap: 12px;
+    }
+
+    .score-band {
+      display: grid;
+      grid-template-columns: 84px minmax(0, 1fr) 64px;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .score-label {
+      font-size: 14px;
+      color: #314043;
+    }
+
+    .score-track {
+      height: 16px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(31, 42, 46, 0.08);
+    }
+
+    .score-fill {
+      width: 0;
+      height: 100%;
+      border-radius: 999px;
+      transition: width 1.4s cubic-bezier(.2, .8, .2, 1);
+    }
+
+    .score-fill.promoter {
+      background: linear-gradient(90deg, #1a7b78 0%, #6fd1bb 100%);
+    }
+
+    .score-fill.neutral {
+      background: linear-gradient(90deg, #d39b56 0%, #ebc57c 100%);
+    }
+
+    .score-fill.detractor {
+      background: linear-gradient(90deg, #a3544a 0%, #de9982 100%);
+    }
+
+    .score-value {
+      text-align: right;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .rating-plate {
+      display: grid;
+      align-content: space-between;
+      gap: 18px;
+      padding: 24px;
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(19, 32, 35, 0.96), rgba(26, 52, 55, 0.92));
+      color: #f4f1ea;
+    }
+
+    .plate-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .plate-caption {
+      max-width: 22ch;
+      color: rgba(244, 241, 234, 0.74);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .nps {
+      font-size: clamp(54px, 7vw, 88px);
+      line-height: 0.9;
+      letter-spacing: -0.06em;
+    }
+
+    .plate-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .plate-cell {
+      padding-top: 14px;
+      border-top: 1px solid rgba(244, 241, 234, 0.14);
+      font-size: 13px;
+      color: rgba(244, 241, 234, 0.74);
+    }
+
+    .plate-cell strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 24px;
+      color: #fffaf2;
+      letter-spacing: -0.04em;
+    }
+
+    .action-matrix {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .action {
+      padding: 20px;
+      border-radius: 24px;
+      border: 1px solid rgba(31, 42, 46, 0.08);
+      background: rgba(255, 255, 255, 0.66);
+    }
+
+    .action .tag {
+      display: inline-block;
+      margin-bottom: 12px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .tag.now {
+      background: #e5f5f2;
+      color: #165a57;
+    }
+
+    .tag.next {
+      background: #fbefdf;
+      color: #8d5a29;
+    }
+
+    .tag.watch {
+      background: #f6e8e5;
+      color: #8f443b;
+    }
+
+    .action h3 {
+      margin: 0 0 10px;
+      font-size: 22px;
+      line-height: 1.15;
+    }
+
+    .action p {
+      margin: 0;
+      font-size: 14px;
+      color: #556366;
+    }
+
+    .voice-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .voice-grid.questions {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .voice {
+      padding: 22px;
+      border-radius: 26px;
+      border: 1px solid rgba(31, 42, 46, 0.08);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(254, 250, 243, 0.7));
+    }
+
+    blockquote {
+      margin: 0;
+      font-family: "Iowan Old Style", "Palatino Linotype", serif;
+      font-size: 20px;
+      line-height: 1.28;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+    }
+
+    .voice p {
+      margin: 14px 0 0;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .footer {
+      padding: 24px 0 8px;
+      border-top: 1px solid rgba(31, 42, 46, 0.09);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .footer-tech {
+      margin-top: 10px;
+      line-height: 1.6;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity .75s ease, transform .75s ease;
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 1080px) {
+      .hero,
+      .section,
+      .dual-graph,
+      .cluster-grid,
+      .action-matrix,
+      .voice-grid,
+      .voice-grid.questions {
+        grid-template-columns: 1fr;
+      }
+
+      .section-head {
+        position: static;
+      }
+
+      .sticky-strip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .hero {
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .shell {
+        width: min(100% - 20px, 1320px);
+      }
+
+      .sticky-strip,
+      .stat-topline,
+      .plate-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-aside,
+      .panel,
+      .voice,
+      .action {
+        padding: 18px;
+      }
+
+      blockquote {
+        font-size: 19px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="hero reveal">
+      <div class="hero-copy">
+        <div class="eyebrow">Terra · поток 38 · Олег Андреев</div>
+        <h1><span class="line">Школа самодисциплины:</span><span class="line">Сказал, Сделал, Заработал!</span></h1>
+        <p class="lead">Общий фон у школы сильный: высокий рейтинг, много лояльности и только несколько повторяющихся сигналов — звук, экран и тайминг.</p>
+      </div>
+
+      <aside class="hero-aside reveal">
+        <div class="stat-topline">
+          <div class="metric">
+            <div class="metric-value">411</div>
+            <div class="metric-label">анкет в массиве</div>
+          </div>
+          <div class="metric">
+            <div class="metric-value">9.62</div>
+            <div class="metric-label">средняя оценка</div>
+          </div>
+          <div class="metric">
+            <div class="metric-value">89.8</div>
+            <div class="metric-label">Индекс лояльности (NPS)</div>
+          </div>
+          <div class="metric">
+            <div class="metric-value">377</div>
+            <div class="metric-label">участников, готовых рекомендовать школу</div>
+          </div>
+        </div>
+      </aside>
+
+      <div class="sticky-strip reveal">
+        <div class="sticky-item">
+          <span class="sticky-number">61%</span>
+          <span class="sticky-text">технических ответов без явных замечаний</span>
+        </div>
+        <div class="sticky-item">
+          <span class="sticky-number">28</span>
+          <span class="sticky-text">повторов про звук и микрофоны</span>
+        </div>
+        <div class="sticky-item">
+          <span class="sticky-number">15</span>
+          <span class="sticky-text">запросов на более чёткий тайминг</span>
+        </div>
+        <div class="sticky-item">
+          <span class="sticky-number">87</span>
+          <span class="sticky-text">ответов “вопросов нет” в блоке вопросов</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section reveal">
+      <div class="section-head">
+        <span class="section-index">ПОТОК 38 · АНКЕТЫ ПО ЗАНЯТИЯМ</span>
+        <h2>Количество ответов по занятиям</h2>
+        <p>Сколько анкет пришло после каждого занятия. Шкала относительно максимума — занятия 02 (72 ответа).</p>
+      </div>
+      <div class="panel">
+        <h3>Ответы по каждому занятию</h3>
+        <p class="microcopy">Длина бара показывает долю от максимального занятия. Подписи справа — абсолютное число анкет.</p>
+        <div class="bar-row">
+          <div class="bar-label">Занятие 01</div>
+          <div class="bar-value">71</div>
+          <div class="bar-track"><div class="bar-fill warm" data-width="98.6"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Занятие 02</div>
+          <div class="bar-value">72</div>
+          <div class="bar-track"><div class="bar-fill warm" data-width="100"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Занятие 03</div>
+          <div class="bar-value">66</div>
+          <div class="bar-track"><div class="bar-fill warm" data-width="91.7"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Занятие 04</div>
+          <div class="bar-value">59</div>
+          <div class="bar-track"><div class="bar-fill warm" data-width="81.9"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Занятие 05</div>
+          <div class="bar-value">53</div>
+          <div class="bar-track"><div class="bar-fill warm" data-width="73.6"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Занятие 06</div>
+          <div class="bar-value">39</div>
+          <div class="bar-track"><div class="bar-fill warm" data-width="54.2"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Занятие 07</div>
+          <div class="bar-value">45</div>
+          <div class="bar-track"><div class="bar-fill warm" data-width="62.5"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section reveal">
+      <div class="section-head">
+        <span class="section-index">01 · Общая картина</span>
+        <h2>Рейтинг высокий, напряжение точечное</h2>
+        <p>Сильная сторона массива не только в оценках. В свободных ответах участники регулярно отмечают ценность материала, харизму Олега Андреева и ощущение пользы. Негативные сигналы не массовые, зато очень конкретные. Блок вопросов при этом живёт своей логикой и вынесен отдельно.</p>
+      </div>
+      <div class="panel dual-graph">
+        <div class="score-wrap">
+          <h3>Оценки по шкале рекомендации</h3>
+          <p class="microcopy">Из 411 анкет почти весь массив лежит в зоне 9–10. Нейтральный слой небольшой, дестракторов почти нет.</p>
+
+          <div class="score-band">
+            <div class="score-label">10 баллов</div>
+            <div class="score-track"><div class="score-fill promoter" data-width="78.3"></div></div>
+            <div class="score-value">322</div>
+          </div>
+          <div class="score-band">
+            <div class="score-label">9 баллов</div>
+            <div class="score-track"><div class="score-fill promoter" data-width="13.4"></div></div>
+            <div class="score-value">55</div>
+          </div>
+          <div class="score-band">
+            <div class="score-label">7–8 баллов</div>
+            <div class="score-track"><div class="score-fill neutral" data-width="6.3"></div></div>
+            <div class="score-value">26</div>
+          </div>
+          <div class="score-band">
+            <div class="score-label">0–6 баллов</div>
+            <div class="score-track"><div class="score-fill detractor" data-width="1.9"></div></div>
+            <div class="score-value">8</div>
+          </div>
+        </div>
+
+        <div class="rating-plate">
+          <div class="plate-top">
+            <div>
+              <p class="kicker" style="color: rgba(244, 241, 234, 0.62); margin-bottom: 8px;">Индекс лояльности</p>
+              <div class="nps">89.8</div>
+            </div>
+            <div class="plate-caption">Почти весь массив относится к промоутерам. Это уровень, на котором уже имеет смысл работать не над спасением оценки, а над точечной коррекцией пользовательского опыта.</div>
+          </div>
+          <div class="plate-grid">
+            <div class="plate-cell">
+              <strong>377</strong>
+              промоутеров
+            </div>
+            <div class="plate-cell">
+              <strong>26</strong>
+              нейтралов
+            </div>
+            <div class="plate-cell">
+              <strong>8</strong>
+              дестракторов
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section reveal">
+      <div class="section-head">
+        <span class="section-index">02 · Техника</span>
+        <h2>Слабое место не в зале, а в слышимости</h2>
+        <p>Когда участники всё-таки оставляют замечание про техническое обеспечение занятий, чаще всего они говорят о звуке. На втором плане идёт читаемость презентации и общая видимость экрана из дальних рядов.</p>
+      </div>
+      <div class="cluster-grid">
+        <div class="panel">
+          <h3>Что пишут про технику</h3>
+          <p class="microcopy">365 непустых ответов в ответах про техническое обеспечение. Из них 224 ответа без замечаний или в логике “всё хорошо”, поэтому график ниже построен только по реальным техническим сигналам.</p>
+          <div class="bar-row">
+            <div class="bar-label">Звук и микрофоны</div>
+            <div class="bar-value">28</div>
+            <div class="bar-track"><div class="bar-fill" data-width="49.1"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Экран, шрифт, видимость</div>
+            <div class="bar-value">9</div>
+            <div class="bar-track"><div class="bar-fill" data-width="15.8"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Вентиляция, душно, холодно</div>
+            <div class="bar-value">7</div>
+            <div class="bar-track"><div class="bar-fill" data-width="12.3"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Записи и видео после урока</div>
+            <div class="bar-value">5</div>
+            <div class="bar-track"><div class="bar-fill" data-width="8.8"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Стулья, рассадка, поверхности</div>
+            <div class="bar-value">4</div>
+            <div class="bar-track"><div class="bar-fill" data-width="7"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Кулер, вода, ручки, листочки</div>
+            <div class="bar-value">4</div>
+            <div class="bar-track"><div class="bar-fill" data-width="7"></div></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Как это читать</h3>
+          <div class="signal-list">
+            <div class="signal">
+              <strong>Главный технический сигнал: звук</strong>
+              <span>повторяется заметно чаще всех остальных замечаний</span>
+            </div>
+            <div class="signal">
+              <strong>Визуальная читаемость — второй приоритет</strong>
+              <span>экран, боковые мониторы, крупнее шрифт, обзор из дальних рядов</span>
+            </div>
+            <div class="signal">
+              <strong>Климат не массовый, но узнаваемый</strong>
+              <span>душно, сквозняк, батареи, вентиляция</span>
+            </div>
+            <div class="signal">
+              <strong>Фоновый плюс: базовое оборудование устраивает большинство</strong>
+              <span>критика точечная, а не системная</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section reveal">
+      <div class="section-head">
+        <span class="section-index">03 · Процесс обучения</span>
+        <h2>Главный организационный запрос — держать ритм вечера</h2>
+        <p>В ответах про улучшение процесса обучения сигнал уже не про железо, а про сам сценарий занятия. Повторяются просьбы заканчивать вовремя, меньше затягивать организационный блок и снизить ощущение жёсткости вокруг правил и отчётности.</p>
+      </div>
+      <div class="cluster-grid">
+        <div class="panel">
+          <h3>Темы, которые всплывают чаще всего</h3>
+          <p class="microcopy">369 непустых ответов в блоке про улучшение процесса обучения. Из них 174 ответа в духе “всё ок / предложений нет”, поэтому график ниже построен только по реальным предложениям и замечаниям.</p>
+          <div class="bar-row">
+            <div class="bar-label">Заканчивать раньше, держать тайминг</div>
+            <div class="bar-value">15</div>
+            <div class="bar-track"><div class="bar-fill warm" data-width="30"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Меньше оргблока, отчётов и штрафного давления</div>
+            <div class="bar-value">10</div>
+            <div class="bar-track"><div class="bar-fill warm" data-width="20"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Экран и читаемость презентаций</div>
+            <div class="bar-value">8</div>
+            <div class="bar-track"><div class="bar-fill warm" data-width="16"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Доступ к записям и материалам</div>
+            <div class="bar-value">7</div>
+            <div class="bar-track"><div class="bar-fill warm" data-width="14"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Больше практики и рабочей части</div>
+            <div class="bar-value">5</div>
+            <div class="bar-track"><div class="bar-fill warm" data-width="10"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Перерывы</div>
+            <div class="bar-value">5</div>
+            <div class="bar-track"><div class="bar-fill warm" data-width="10"></div></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Что это значит для команды</h3>
+          <div class="signal-list">
+            <div class="signal">
+              <strong>Режим вечера чувствителен</strong>
+              <span>слушатели готовы к плотности, но не хотят затяжки после 22:00</span>
+            </div>
+            <div class="signal">
+              <strong>Дисциплина работает, если не выглядит как кнут</strong>
+              <span>в нескольких ответах слышна усталость от штрафов и организационного нажима</span>
+            </div>
+            <div class="signal">
+              <strong>Нужен чуть более прикладной темп</strong>
+              <span>в отдельных оценках напрямую просят меньше воды и больше практики</span>
+            </div>
+            <div class="signal">
+              <strong>Материалы и записи влияют на ощущение стабильности</strong>
+              <span>это не главный, но устойчивый слой ожиданий</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section reveal">
+      <div class="section-head">
+        <span class="section-index">04 · Что готовы делать сами</span>
+        <h2>Самоорганизация есть, но инициативное ядро небольшое</h2>
+        <p>В ответах про личный вклад в улучшения много честных формулировок “пока не знаю”. Это нормально для ранних занятий. При этом заметная группа уже готова помогать школе, волонтёрить и участвовать в улучшениях, если это будет оформлено в понятный формат.</p>
+      </div>
+      <div class="cluster-grid">
+        <div class="panel">
+          <h3>Распределение ответов</h3>
+          <p class="microcopy">218 непустых ответов в блоке про личный вклад в улучшения.</p>
+          <div class="bar-row">
+            <div class="bar-label">Пока не знают, что могут сделать</div>
+            <div class="bar-value">54</div>
+            <div class="bar-track"><div class="bar-fill danger" data-width="49.1"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Готовы помогать, участвовать, волонтёрить</div>
+            <div class="bar-value">37</div>
+            <div class="bar-track"><div class="bar-fill" data-width="33.6"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Бытовая помощь и помощь с организацией</div>
+            <div class="bar-value">11</div>
+            <div class="bar-track"><div class="bar-fill" data-width="10"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Уже дали обратную связь или готовы уточнять</div>
+            <div class="bar-value">8</div>
+            <div class="bar-track"><div class="bar-fill" data-width="7.3"></div></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Практический вывод</h3>
+          <div class="signal-list">
+            <div class="signal">
+              <strong>Не стоит ожидать самозапуска</strong>
+              <span>инициатива появится, если школа предложит конкретные роли, а не общий призыв “помогайте”</span>
+            </div>
+            <div class="signal">
+              <strong>Есть ядро для волонтёрского контура</strong>
+              <span>готовность участвовать уже видна даже на раннем этапе</span>
+            </div>
+            <div class="signal">
+              <strong>Обратная связь участникам понятна</strong>
+              <span>часть людей прямо пишет, что уже сообщила свои предложения</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section reveal">
+      <div class="section-head">
+        <span class="section-index">05 · Решения</span>
+        <h2>Что менять сейчас, что держать под наблюдением</h2>
+        <p>Массив не просит большой перестройки продукта. Он просит несколько понятных и заметных улучшений, которые быстро снизят трение без вмешательства в сильную часть программы.</p>
+      </div>
+      <div class="action-matrix">
+        <article class="action panel">
+          <div class="tag now">Сделать сейчас</div>
+          <h3>Звук и микрофоны</h3>
+          <p>Проверка микрофона до старта, контроль фона и резервный сценарий для спикера. Это самый частый технический сигнал и самый дешёвый в исправлении.</p>
+        </article>
+
+        <article class="action panel">
+          <div class="tag next">Следом</div>
+          <h3>Тайминг вечернего занятия</h3>
+          <p>Жёстче резать организационный блок и держать финиш не позже ожидаемого окна. Это главный повторяющийся организационный запрос.</p>
+        </article>
+
+        <article class="action panel">
+          <div class="tag next">Следом</div>
+          <h3>Видимость презентаций</h3>
+          <p>Проверить крупность шрифта, обзор с дальних рядов и сценарий с боковыми экранами. Проблема реже звука, но очень конкретная.</p>
+        </article>
+
+        <article class="action panel">
+          <div class="tag watch">Наблюдать</div>
+          <h3>Тон дисциплины</h3>
+          <p>Штрафы и строгие правила не стали массовым протестом, но несколько ответов звучат резко. Здесь лучше работать с подачей, а не только с правилами.</p>
+        </article>
+
+        <article class="action panel">
+          <div class="tag watch">Наблюдать</div>
+          <h3>Практика против “воды”</h3>
+          <p>Сигнал редкий, но важный по качеству. Если он начнёт повторяться на следующих занятиях, это уже вопрос сценария школы, а не отдельной реплики.</p>
+        </article>
+
+        <article class="action panel">
+          <div class="tag now">Поддержать</div>
+          <h3>Доступ к материалам</h3>
+          <p>Понятный ритм публикации записей и материалов добавит ощущение собранности и снизит часть организационного трения без больших затрат.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section reveal">
+      <div class="section-head">
+        <span class="section-index">06 · Вопросы спикеру</span>
+        <h2>Какие вопросы задают спикеру и школе</h2>
+        <p>Это не комментарии об обучении, а отдельный слой коммуникации: часть людей не задаёт вопросов, часть благодарит, а часть задаёт очень конкретные вопросы про методику, жизненные стратегии, личные цели и формат школы.</p>
+      </div>
+      <div class="cluster-grid">
+        <div class="panel">
+          <h3>Структура блока вопросов</h3>
+          <p class="microcopy">179 непустых ответов в блоке вопросов. Из них 87 ответов в логике “вопросов нет”, поэтому график ниже показывает содержательные обращения и реальные темы вопросов.</p>
+          <div class="bar-row">
+            <div class="bar-label">Благодарность без вопроса</div>
+            <div class="bar-value">13</div>
+            <div class="bar-track"><div class="bar-fill" data-width="31"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Личный путь спикера, энергия, кейсы</div>
+            <div class="bar-value">9</div>
+            <div class="bar-track"><div class="bar-fill warm" data-width="21.4"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Мировоззренческие и личные вопросы</div>
+            <div class="bar-value">5</div>
+            <div class="bar-track"><div class="bar-fill warm" data-width="11.9"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Расписание, следующий поток</div>
+            <div class="bar-value">4</div>
+            <div class="bar-track"><div class="bar-fill warm" data-width="9.5"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Методика, нагрузка, штрафы</div>
+            <div class="bar-value">4</div>
+            <div class="bar-track"><div class="bar-fill danger" data-width="9.5"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Личные цели, саботаж, прокрастинация</div>
+            <div class="bar-value">4</div>
+            <div class="bar-track"><div class="bar-fill danger" data-width="9.5"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Переходы, куратор, доступ к видео</div>
+            <div class="bar-value">3</div>
+            <div class="bar-track"><div class="bar-fill warm" data-width="7.1"></div></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Что именно спрашивают</h3>
+          <div class="signal-list">
+            <div class="signal">
+              <strong>Про путь самого спикера</strong>
+              <span>энергия, личные кейсы преодоления, преподавательский опыт, следующие темы</span>
+            </div>
+            <div class="signal">
+              <strong>Про собственные цели и саботаж</strong>
+              <span>как выбрать главную цель, как работать со страхом сроков и прокрастинацией</span>
+            </div>
+            <div class="signal">
+              <strong>Про формат школы</strong>
+              <span>следующий поток, смена группы, куратор, доступ к видео, переход между школами</span>
+            </div>
+            <div class="signal">
+              <strong>Про тон методики</strong>
+              <span>отдельные вопросы касаются нагрузки, штрафов и постепенности входа в дисциплину</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel" style="grid-column: 1 / -1;">
+          <h3>Примеры реальных вопросов</h3>
+          <div class="voice-grid questions">
+            <article class="voice">
+              <blockquote>“Что делать, если при постановке сроков к целям это вызывает страх и сопротивление?”</blockquote>
+              <p>Кластер про личные цели и внутренние барьеры.</p>
+            </article>
+            <article class="voice">
+              <blockquote>“Если все выполняешь в срок, присутствуешь на занятии, возможно получить доступ к видео занятий?”</blockquote>
+              <p>Кластер про формат участия и доступ к материалам.</p>
+            </article>
+            <article class="voice">
+              <blockquote>“Расскажите, как вы преодолевали трудные жизненные ситуации. Что именно делали.”</blockquote>
+              <p>Кластер про личный путь спикера и прикладные кейсы.</p>
+            </article>
+            <article class="voice">
+              <blockquote>“Какую цель на обучение лучше ставить: маленькую или большую?”</blockquote>
+              <p>Кластер про постановку целей и рамку работы в школе.</p>
+            </article>
+            <article class="voice">
+              <blockquote>“А зачем начинать школу самодисциплины с таких объёмов заданий? И за всё штрафовать?”</blockquote>
+              <p>Кластер про методику, темп входа и восприятие дисциплины.</p>
+            </article>
+            <article class="voice">
+              <blockquote>“Как вам на всё хватает сил и времени?”</blockquote>
+              <p>Кластер про личную энергию спикера и перенос его подхода на себя.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section reveal">
+      <div class="section-head">
+        <span class="section-index">07 · Голос участников</span>
+        <h2>Короткие цитаты, которые задают тон массиву</h2>
+        <p>Ниже не буквальная статистика, а живой слой восприятия из ответов про технику, процесс обучения и причины высокой оценки. Он полезен для презентации результатов руководителю или команде школы.</p>
+      </div>
+      <div class="voice-grid">
+        <article class="voice panel">
+          <h3>Сильная сторона</h3>
+          <blockquote>“Тема актуальная, спикер компетентный, харизматичный, структурный.”</blockquote>
+          <p>Таких формулировок много: ценят и содержание, и фигуру спикера.</p>
+        </article>
+
+        <article class="voice panel">
+          <h3>Точечное трение</h3>
+          <blockquote>“Заканчивать в 10 занятие. Огромный диссонанс между штрафом за нарушение тихого режима и неторопливостью спикера в 22.30.”</blockquote>
+          <p>Хороший пример того, как организационный ритм влияет на восприятие даже при высокой оценке школы.</p>
+        </article>
+
+        <article class="voice panel">
+          <h3>Сигнал на доработку</h3>
+          <blockquote>“Поставить телевизоры по бокам. В большом зале не видно экран центра.”</blockquote>
+          <p>Запрос неэмоциональный, поэтому его легко превратить в понятное решение.</p>
+        </article>
+      </div>
+    </section>
+
+    <footer class="footer reveal">
+      Дашборд собран по файлам `38_поток_СамоД/ОС - 87.csv` и `38_поток_СамоД/ОС_87_сводка.json`. Частотные темы в свободных ответах объединены по смыслу, а блок вопросов спикеру вынесен в отдельный аналитический раздел.
+      <div class="footer-tech">Техническая справка: источник — `ОС - 87.csv`; анализ — техника, процесс обучения, вклад участников, причины оценок и вопросы спикеру; промежуточная сводка — `ОС_87_сводка.json`.</div>
+    </footer>
+  </main>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        entry.target.classList.add('is-visible');
+        entry.target.querySelectorAll('[data-width]').forEach((node) => {
+          node.style.width = node.dataset.width + '%';
+        });
+      }
+    }, { threshold: 0.18 });
+
+    document.querySelectorAll('.reveal, .panel, .voice, .hero-aside').forEach((node) => {
+      observer.observe(node);
+    });
+  </script>
+</body>
+</html>

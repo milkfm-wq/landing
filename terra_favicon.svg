@@ -1,10 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <title>TERRA</title>
-  <circle cx="32" cy="32" r="23.5"
-          fill="none"
-          stroke="#1F7FFF"
-          stroke-width="6"
-          stroke-linecap="round"
-          stroke-dasharray="126 22"
-          transform="rotate(-43 32 32)"/>
-</svg>
+<svg viewBox="0 0 29 29" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.4928 28.7958C22.4969 28.7958 28.9856 22.3496 28.9856 14.3979C28.9856 6.44616 22.4969 0 14.4928 0C6.48863 0 0 6.44616 0 14.3979C0 22.3496 6.48863 28.7958 14.4928 28.7958ZM13.1341 26.0962C19.8876 26.0962 25.3624 20.6573 25.3624 13.948C25.3624 7.23869 19.8876 1.79974 13.1341 1.79974C6.38057 1.79974 0.905798 7.23869 0.905798 13.948C0.905798 20.6573 6.38057 26.0962 13.1341 26.0962Z" fill="#1681FF"></path></svg>

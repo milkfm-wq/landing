@@ -200,6 +200,78 @@ button{cursor:pointer}
 @media(max-width:1199px){.desktop-rate,.desktop-count{display:none}.lesson-head-numbers{display:none}}
 @media(prefers-reduced-motion:reduce){.dialog,.load-track i,.sk{animation:none}}
 
+
+/* Site 2 v02 — diagnostic usability corrections */
+.info-pop{position:fixed;top:0;left:0;right:auto}
+.info-pop{
+ white-space:normal;overflow-wrap:break-word;word-break:normal;
+ width:min(400px,calc(100vw - 24px));max-width:calc(100vw - 24px);
+ max-height:min(68vh,440px);overflow-y:auto;
+ font-size:12px;line-height:17px;text-align:left;
+}
+.info-pop p{white-space:normal;overflow-wrap:break-word;margin:0 0 12px;line-height:17px}
+.info-pop p:last-child{margin-bottom:0}
+.info-pop[hidden]{display:none}
+.kpi .info-dot{display:inline-grid;vertical-align:middle;margin-left:4px;flex:none}
+.help-pop{position:fixed;z-index:90;width:min(340px,calc(100vw - 24px));padding:12px;
+ background:var(--ink);border-radius:var(--r-ctl);color:var(--surface);
+ font-size:12px;line-height:17px;white-space:normal;overflow-wrap:break-word;
+ max-height:60vh;overflow:auto;box-shadow:0 24px 64px rgba(20,35,30,.24)}
+.help-pop[hidden]{display:none}
+.help-pop b{color:inherit}
+.dq-intro{margin:12px 0 16px;max-width:850px;color:var(--ink-2);font-size:13px;line-height:19px}
+.dq-intro strong{color:var(--ink)}
+.dq-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+.dq-kpi{padding:12px}
+.dq-kpi .dq-kpi-title{font-size:12px;line-height:16px;color:var(--ink-2);font-weight:600}
+.dq-kpi .dq-kpi-desc{margin-top:4px;font-size:11px;line-height:16px;color:var(--ink-2)}
+.dq-kpi .n{font-variant-numeric:tabular-nums}
+.dq-structure{margin:12px 0 20px;padding:12px 16px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card)}
+.dq-structure summary{font-size:13px;line-height:18px;font-weight:600;cursor:pointer}
+.dq-structure p{margin:12px 0 0;color:var(--ink-2);font-size:12px;line-height:18px}
+.dq-structure .raw-numbers{margin-top:8px;display:flex;gap:8px 24px;flex-wrap:wrap;font-size:13px;line-height:20px}
+.dq-structure .raw-numbers b{color:var(--ink);font-variant-numeric:tabular-nums}
+.dq-quality-head{margin:24px 0 12px}
+.dq-quality-head h3{font-size:16px;line-height:22px;margin:0 0 4px}
+.dq-quality-head p{font-size:12px;line-height:17px;color:var(--ink-2);margin:0}
+.dq-filters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;align-items:end;margin-bottom:12px}
+.dq-field{display:flex;flex-direction:column;min-width:0;gap:4px}
+.dq-field>span{font-size:11px;line-height:14px;color:var(--ink-2);font-weight:600}
+.dq-field .select,.dq-field .input{height:44px;font-size:16px;line-height:22px;padding:0 10px}
+.dq-levels{display:flex;gap:4px;align-items:center;grid-column:1/-1;overflow-x:auto;min-height:44px;scrollbar-width:thin}
+.dq-levels button{flex:1;min-height:44px;padding:8px 10px;border:1px solid var(--line);border-radius:var(--r-ctl);background:var(--surface);color:var(--ink-2);font-size:12px;line-height:16px;font-weight:600;white-space:nowrap}
+.dq-levels button[aria-pressed='true']{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+.dq-result-count{grid-column:1/-1;color:var(--ink-2);font-size:12px;line-height:16px;align-self:center}
+.dq-cards{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+.dq-card{min-width:0;padding:16px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);box-shadow:var(--shadow-card)}
+.dq-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.dq-card h4{font-size:15px;line-height:20px;font-weight:700;margin:0;overflow-wrap:anywhere}
+.dq-card .level{flex:none}
+.dq-card-school{margin:8px 0;color:var(--ink);font-size:13px;line-height:18px;overflow-wrap:break-word}
+.dq-card-school .leader{font-size:12px;line-height:16px;margin-top:4px}
+.dq-card-values{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}
+.dq-card-value{min-width:0;padding:12px;background:var(--surface-2);border-radius:var(--r-ctl)}
+.dq-card-value .dt{font-size:11px;line-height:15px;color:var(--ink-2);font-weight:500}
+.dq-card-value .dd{margin-top:4px;font-size:16px;line-height:22px;font-weight:650;color:var(--ink);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.dq-card-value .dd.long{font-size:13px;line-height:19px}
+.dq-card-explain{margin:12px 0 0;color:var(--ink-2);font-size:12px;line-height:18px}
+.dq-card-next{margin:8px 0 0;color:var(--ink);font-size:12px;line-height:18px}
+.dq-card-period{margin-top:8px;color:var(--ink-2);font-size:11px;line-height:16px}
+.dq-card details{margin-top:12px;border-top:1px solid var(--line);padding-top:8px;color:var(--ink-2);font-size:11px;line-height:16px}
+.dq-card details summary{cursor:pointer;font-size:12px;line-height:18px}
+.dq-card details p{margin:8px 0 0;overflow-wrap:anywhere}
+.dq-glossary{margin:0 0 16px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);padding:12px 16px}
+.dq-glossary>summary{font-size:13px;line-height:20px;font-weight:600;cursor:pointer}
+.dq-glossary-list{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;margin-top:12px}
+.dq-glossary-item{padding-bottom:12px;border-bottom:1px solid var(--line)}
+.dq-glossary-item:last-child{padding-bottom:0;border:0}
+.dq-glossary-item b{font-size:13px;line-height:18px}
+.dq-glossary-item p{margin:4px 0 0;color:var(--ink-2);font-size:12px;line-height:18px}
+@media(max-width:639px){.dq-levels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));overflow:visible}.dq-levels button{min-width:0;white-space:normal}}
+@media(min-width:640px){.dq-kpis{grid-template-columns:repeat(4,minmax(0,1fr))}.dq-filters{grid-template-columns:repeat(3,minmax(0,1fr))}.dq-levels{grid-column:1/-1}}
+@media(min-width:768px){.dq-cards,.dq-glossary-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(min-width:1200px){.dq-field .select,.dq-field .input{height:40px;font-size:14px;line-height:20px}.dq-levels button{min-height:40px}.dq-filters{grid-template-columns:1fr 1fr 1fr}.dq-cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
 </style>
 </head>
 <body>
@@ -239,6 +311,7 @@ button{cursor:pointer}
 </div>
 
 <dialog class="dialog" id="schoolDialog"></dialog>
+<div class="help-pop" id="helpPopover" role="status" hidden></div>
 
 <script>
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
@@ -254,10 +327,29 @@ const DEFAULT_API_BASE='https://script.google.com/macros/s/AKfycbxMVZQ3K7VbshTnz
 const qs=new URLSearchParams(location.search);
 const API_BASE=window.TERRA_API_URL||qs.get('api')||DEFAULT_API_BASE;
 const FLOW=Number(qs.get('flow')||40);
-const state={data:null,tab:'signals',signalMin:1,signalSort:'rate',search:'',dqLevel:'all',dqCategory:'all'};
+const state={data:null,tab:'signals',signalMin:1,signalSort:'rate',search:'',dqLevel:'all',dqCategory:'all',dqCode:'all'};
 
-function bindTips(root=document){root.querySelectorAll('.info-dot,.info-btn').forEach(btn=>{if(btn.dataset.bound)return;btn.dataset.bound='1';btn.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();const was=btn.classList.contains('open');document.querySelectorAll('.info-dot.open,.info-btn.open').forEach(x=>x.classList.remove('open'));if(!was)btn.classList.add('open')})})}
-document.addEventListener('click',()=>document.querySelectorAll('.info-dot.open,.info-btn.open').forEach(x=>x.classList.remove('open')));
+function closeHelpPopover(){const p=document.getElementById('helpPopover');if(p)p.hidden=true;document.querySelectorAll('.info-dot[aria-expanded="true"][data-tip]').forEach(b=>b.setAttribute('aria-expanded','false'))}
+function bindTips(root=document){
+ root.querySelectorAll('.info-dot[data-tip],.info-btn[data-tip]').forEach(btn=>{
+  if(btn.dataset.bound)return;
+  btn.dataset.bound='1';btn.setAttribute('aria-expanded','false');
+  btn.addEventListener('click',e=>{
+   e.preventDefault();e.stopPropagation();
+   const pop=document.getElementById('helpPopover'),was=!pop.hidden&&pop.dataset.owner===btn.dataset.helpId;
+   closeHelpPopover();if(was)return;
+   if(!btn.dataset.helpId)btn.dataset.helpId='help-'+(++helpSequence);
+   pop.dataset.owner=btn.dataset.helpId;pop.textContent=btn.dataset.tip||'';pop.hidden=false;
+   const rect=btn.getBoundingClientRect(),w=pop.offsetWidth,h=pop.offsetHeight;
+   pop.style.left=Math.max(12,Math.min(window.innerWidth-w-12,rect.right-w))+'px';
+   pop.style.top=(rect.bottom+8+h>window.innerHeight&&rect.top>h+16?rect.top-h-8:rect.bottom+8)+'px';
+   btn.setAttribute('aria-expanded','true');
+  });
+ });
+}
+let helpSequence=0;
+document.addEventListener('click',e=>{const pop=document.getElementById('helpPopover');if(pop&&!pop.hidden&&!pop.contains(e.target))closeHelpPopover()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeHelpPopover()});
 
 function statusInfoMarkup(d){
  const last=shortStamp(d.meta?.sourceLastResponseAt),rows=nfmt(d.meta?.sourceRows);
@@ -266,7 +358,7 @@ function statusInfoMarkup(d){
 function liveStatus(d){return `<div class="status-title"><span class="status-dot"></span>Обновлено ${shortStamp(d.meta?.generatedAt)} МСК</div>${statusInfoMarkup(d)}`}
 function bindStatusInfo(){
  const btn=document.getElementById('statusInfoBtn'),pop=document.getElementById('statusInfoPop');if(!btn||!pop)return;
- btn.onclick=e=>{e.stopPropagation();pop.hidden=!pop.hidden;btn.setAttribute('aria-expanded',String(!pop.hidden))};
+ btn.onclick=e=>{e.stopPropagation();pop.hidden=!pop.hidden;btn.setAttribute('aria-expanded',String(!pop.hidden));if(!pop.hidden){const rect=btn.getBoundingClientRect(),w=pop.offsetWidth,h=pop.offsetHeight;pop.style.left=Math.max(12,Math.min(window.innerWidth-w-12,rect.right-w))+'px';pop.style.top=(rect.bottom+8+h>window.innerHeight&&rect.top>h+16?rect.top-h-8:rect.bottom+8)+'px'}};
  if(!document.body.dataset.infoBound){document.body.dataset.infoBound='1';document.addEventListener('click',e=>{const p=document.getElementById('statusInfoPop'),b=document.getElementById('statusInfoBtn');if(p&&!p.hidden&&!p.contains(e.target)&&!b.contains(e.target)){p.hidden=true;b.setAttribute('aria-expanded','false')}});document.addEventListener('keydown',e=>{if(e.key==='Escape'){const p=document.getElementById('statusInfoPop'),b=document.getElementById('statusInfoBtn');if(p&&!p.hidden){p.hidden=true;b?.setAttribute('aria-expanded','false')}}})}
 }
 function setLoading(attempt,total){
@@ -278,7 +370,7 @@ function loadJsonpOnce(url,timeoutMs,attempt){return new Promise((resolve,reject
 async function loadLiveData(){const url=apiUrl(API_BASE,FLOW,API_VIEW),timeouts=[15000,22000,30000,40000];let last=null;for(let i=0;i<timeouts.length;i++){setLoading(i+1,timeouts.length);try{const d=await loadJsonpOnce(url,timeouts[i],i+1);if(!d||typeof d!=='object')throw new Error('Пустой ответ API');if(d.error)throw new Error(d.message||d.error);return d}catch(e){last=e;if(i<timeouts.length-1)await wait(700*Math.pow(2,i))}}throw last||new Error('Не удалось загрузить данные')}
 function showLoadError(e){console.error(e);const box=document.getElementById('updated');box.classList.add('error');box.innerHTML='<div class="status-title"><span class="status-dot"></span>Не удалось подключиться к данным</div><div>Все попытки завершились ошибкой.</div>';document.getElementById('view-signals').innerHTML='<div class="errorbox"><b>Актуальные данные не загрузились.</b><br>Старый снимок не показывается. Можно сразу повторить подключение.<br><button class="retry-btn" onclick="location.reload()">Повторить загрузку</button></div>'}
 
-function signalTip(){return 'Сигнал — анкета, где участник отметил просьбу подписаться на соцсети или рекламу / продажи на занятии. Одна анкета считается одним сигналом, даже если отмечены оба пункта.'}
+function signalTip(){return 'Анкет с сигналом — число анкет, где отмечены соцсети и/или реклама либо продажи. Одна анкета считается один раз, даже если отмечены оба пункта. Доля всех ответов = количество анкет с сигналом, разделённое на количество всех анкет потока, умноженное на 100.'}
 const MIN_RESPONSES_FOR_SHARE = 20;
 function percentLabel(v){
  if(v==null||!Number.isFinite(Number(v)))return '—';
@@ -396,9 +488,61 @@ function openSchool(id){
 }
 
 const categoryNames={structure:'Структура данных',calendar:'Календарь',activity:'Активность ответов',scores:'Оценочные паттерны',duplicates:'Повторы',format:'Формат занятий',competition:'Плотность рейтинга'};
-function renderQuality(){const q=state.data.dataQuality||{signals:[],structure:{}},el=document.getElementById('view-quality'),cats=[...new Set((q.signals||[]).map(x=>x.category))].sort();el.innerHTML=`<div class="hero"><h2>Контроль данных</h2><p>Техническая диагностика источника и необычных паттернов. Эти сигналы нужны для проверки качества данных и ничего не удаляют автоматически.</p></div><div class="dq-kpis"><div class="card dq-kpi"><span class="level error">Ошибка</span><div class="n">${q.errors||0}</div></div><div class="card dq-kpi"><span class="level warning">Проверить</span><div class="n">${q.warnings||0}</div></div><div class="card dq-kpi"><span class="level info">Информация</span><div class="n">${q.info||0}</div></div><div class="card dq-kpi"><span class="level ok">Структура</span><div class="n">${q.structure?.invalidRows===0?'OK':nfmt(q.structure?.invalidRows||0)}</div><div class="leader">${nfmt(q.structure?.schoolParseErrors||0)} ошибок распознавания школы</div></div></div><div class="sectionhead"><div><h3>Диагностические сигналы</h3><p>Здесь показаны необычные значения, которые стоит проверить. Текущее значение сравнивается с ориентиром, а номер недели показывает, когда этот сигнал появился.</p></div></div><div class="toolbar"><select id="dqLevel" class="select"><option value="all">Все уровни</option><option value="error">Ошибки</option><option value="warning">Нужно проверить</option><option value="info">Информация</option></select><select id="dqCategory" class="select"><option value="all">Все категории</option>${cats.map(c=>`<option value="${esc(c)}">${esc(categoryNames[c]||c)}</option>`).join('')}</select></div><div class="card"><div id="dqTable"></div></div>`;el.querySelector('#dqLevel').value=state.dqLevel;el.querySelector('#dqCategory').value=state.dqCategory;el.querySelector('#dqLevel').onchange=e=>{state.dqLevel=e.target.value;renderDqTable()};el.querySelector('#dqCategory').onchange=e=>{state.dqCategory=e.target.value;renderDqTable()};renderDqTable()}
-function dqSchool(s){if(!s.schoolId)return '—';const d=state.data.schools?.[String(s.schoolId)]||state.data.schools?.[s.schoolId]||(state.data.participantSignals?.cup?.allSchools||[]).find(x=>Number(x.schoolId)===Number(s.schoolId));return d?`<b>№${esc(s.schoolId)} · ${esc(d.displayName||'')}</b><span class="leader">${esc(d.leaderName||'')}</span>`:`№${esc(s.schoolId)}`}
-function renderDqTable(){const box=document.getElementById('dqTable');if(!box)return;const q=state.data.dataQuality||{signals:[]};const rows=(q.signals||[]).filter(s=>(state.dqLevel==='all'||s.level===state.dqLevel)&&(state.dqCategory==='all'||s.category===state.dqCategory));box.innerHTML=rows.length?`<div class="tablewrap"><table class="dq-table"><thead><tr><th>Уровень сигнала</th><th>Школа</th><th>Что нужно проверить</th><th>Текущее значение</th><th>Ориентир для сравнения</th><th>Номер недели</th></tr></thead><tbody>${rows.map(s=>`<tr><td><span class="level ${esc(s.level)}">${s.level==='error'?'Ошибка':s.level==='warning'?'Проверить':'Инфо'}</span></td><td>${dqSchool(s)}</td><td><span class="dq-title">${esc(s.title||'')}</span><span class="dq-code">${esc(categoryNames[s.category]||s.category||'')} · ${esc(s.code||'')}</span></td><td>${esc(s.observed??'—')}</td><td>${esc(s.baseline??'—')}</td><td>${esc(s.week??'—')}</td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">По выбранному фильтру сигналов нет</div>'}
+const diagnosticTypes={
+ TIMEZONE_MISMATCH:{name:'Несовпадение часового пояса',found:'Часовые пояса таблицы / скрипта',baseline:'Ожидаемый часовой пояс',explain:'В таблице и скрипте часовые пояса не совпадают с московским. Это может влиять на распределение анкет по неделям.',action:'Проверить часовой пояс Google Sheets и проекта Apps Script.',format:'text'},
+ SCHOOL_LABEL_VARIANTS:{name:'Разные названия одной школы',found:'Вариантов названия',baseline:'Обычное число вариантов',explain:'Для одного номера школы встречается несколько текстовых названий.',action:'Сверить названия школы в форме и исходных ответах.',format:'variants'},
+ SCHOOL_NAME_FALLBACK:{name:'Название школы разобрано упрощённо',found:'Исходная запись школы',baseline:'Эталон не задан',explain:'Номер школы удалось получить, но название или руководитель разобраны резервным способом.',action:'Проверить корректность названия и руководителя в справочнике школ.',format:'text'},
+ FIRST_WEEK_LOW_VOLUME:{name:'Мало ответов на первой неделе',found:'Анкет на первой неделе',baseline:'Контрольный минимум анкет',explain:'За первую неделю потока получено меньше анкет, чем установленный контрольный минимум.',action:'Уточнить дату начала занятий и сбор обратной связи.',format:'count'},
+ START_GAP:{name:'Длинная пауза после первой анкеты',found:'Перерыв между первыми анкетами',baseline:'Контрольный срок',explain:'После самой первой анкеты потока следующая поступила с необычно большой задержкой.',action:'Проверить начало сбора анкет и даты первых занятий.',format:'days1'},
+ NEW_SCHOOL_ID:{name:'Школа появилась после старта потока',found:'Первые ответы школы',baseline:'Старт потока',explain:'Первые анкеты этой школы появились позднее первой недели текущего потока. Это не обязательно ошибка.',action:'Уточнить, с какого занятия школа начала участвовать в потоке.',format:'week'},
+ BURST_RESPONSES:{name:'Необычный всплеск ответов',found:'Максимум анкет за 10 минут',baseline:'Медианный максимум прошлых недель',explain:'Скрипт сравнивает наибольшее число анкет за любой 10-минутный интервал с медианой таких максимумов прошлых недель школы. Также действует абсолютный порог.',action:'Проверить, собирались ли анкеты сразу после занятия или массово в один момент.',format:'count'},
+ WEEKLY_VOLUME_GROWTH:{name:'Резкий рост числа ответов',found:'Анкет за эту неделю',baseline:'Анкет за прошлую неделю',explain:'Число анкет за неделю как минимум удвоилось по сравнению с предыдущей неделей при достаточном количестве ответов.',action:'Сравнить посещаемость и способы сбора анкет на соседних неделях.',format:'count'},
+ NO_RECENT_RESPONSES:{name:'Давно нет новых анкет',found:'Дней после последней анкеты',baseline:'Контрольный срок',explain:'С момента последней анкеты этой школы прошло больше установленного числа дней. Номер недели не указывается: сигнал относится к текущему периоду без ответов.',action:'Проверить, идут ли занятия и продолжается ли сбор обратной связи.',format:'days'},
+ SCORE_JUMP:{name:'Резкое изменение среднего балла',found:'Средний балл этой недели',baseline:'Средний балл прошлой недели',explain:'Средний балл по пяти рейтинговым вопросам заметно изменился относительно предыдущей недели.',action:'Посмотреть, изменились ли содержание или условия занятий.',format:'score'},
+ PERFECT_SHARE_JUMP:{name:'Резкое изменение доли максимальных анкет',found:'Максимальных анкет сейчас',baseline:'Максимальных анкет раньше',explain:'Доля анкет со всеми максимальными рейтинговыми оценками заметно изменилась в процентных пунктах.',action:'Сравнить состав и объём ответов двух недель.',format:'percentage'},
+ PERFECT_100_PERCENT:{name:'Все анкеты с максимальными оценками',found:'Анкет с максимальными оценками',baseline:'Сравнительного значения нет',explain:'Во всех учтённых анкетах недели стоят максимальные оценки по рейтинговым вопросам при достаточно большой выборке.',action:'Уточнить объём ответов и формат проведения занятия.',format:'percentage'},
+ LOW_VARIANCE:{name:'Необычно одинаковые оценки',found:'Разброс оценок этой недели',baseline:'Разброс оценок прошлой недели',explain:'Стандартное отклонение итоговых баллов стало необычно маленьким по сравнению с предыдущей неделей.',action:'Проверить динамику оценок и число ответов; сам по себе признак не доказывает манипуляцию.',format:'score'},
+ REPEATED_FINGERPRINT:{name:'Похожие анкеты за короткое время',found:'Похожих анкет за 10 минут',baseline:'Контрольный минимум',explain:'За короткий интервал много анкет содержали одинаковые структурированные ответы.',action:'Проверить, не было ли одновременной отправки после занятия или дублирования ответов.',format:'count'},
+ SAME_TIMESTAMP_CLUSTER:{name:'Много анкет в одну секунду',found:'Анкет с одинаковой секундой',baseline:'Контрольный минимум',explain:'У нескольких анкет совпадает время отправки с точностью до секунды.',action:'Проверить экспорт отметок времени и возможную пакетную отправку.',format:'count'},
+ FORMAT_SHIFT:{name:'Изменилось соотношение онлайн и офлайн',found:'Доля онлайн сейчас',baseline:'Доля онлайн раньше',explain:'Доля онлайн-занятий среди анкет сильно изменилась по сравнению с предыдущей неделей.',action:'Проверить, действительно ли менялся формат занятий.',format:'percentage'},
+ RANK_DENSITY:{name:'Место изменилось при близком балле',found:'Текущее место школы',baseline:'Прошлое место школы',explain:'Место школы в рейтинге существенно изменилось, хотя средний балл изменился незначительно.',action:'Проверить плотность баллов соседних школ; это не ошибка и не жалоба.',format:'rank'},
+ LEADER_NEAR_THRESHOLD:{name:'Лидер близок к порогу анкет',found:'Анкет у школы',baseline:'Минимум для рейтинга',explain:'Школа находится среди лидеров, но число анкет ненамного превышает необходимый минимум.',action:'Оценивать место с учётом объёма выборки.',format:'count'},
+ DROPPED_BY_THRESHOLD:{name:'Школа ниже нового порога рейтинга',found:'Анкет у школы',baseline:'Текущий минимум для рейтинга',explain:'Порог количества анкет для общего рейтинга вырос, и школе теперь недостаточно ответов для официального места.',action:'Уточнить сбор обратной связи; снижение места само по себе не означает ухудшения занятий.',format:'count'}
+};
+function dqSchool(s){if(!s.schoolId)return '<b>Весь поток / источник</b>';const d=state.data.schools?.[String(s.schoolId)]||state.data.schools?.[s.schoolId]||(state.data.participantSignals?.cup?.allSchools||[]).find(x=>Number(x.schoolId)===Number(s.schoolId));return d?`<b>№${esc(s.schoolId)} · ${esc(d.displayName||'Школа')}</b><span class="leader">${esc(d.leaderName||'')}</span>`:`<b>Школа №${esc(s.schoolId)}</b>`}
+function diagnosticType(s){return diagnosticTypes[s.code]||{name:s.title||s.code||'Диагностическая проверка',found:'Выявленное значение',baseline:'Контрольный ориентир',explain:'Автоматическая проверка выявила значение, требующее дополнительного контекста.',action:'Проверить источник и условия появления показателя.',format:'text'}}
+function dqVal(v,fmt,hasValue=true){if(!hasValue||v==null||v==='')return 'Нет данных для сравнения';const n=Number(v),numeric=typeof v==='number'||(typeof v==='string'&&v.trim()!==''&&Number.isFinite(n));if(fmt==='variants'&&numeric)return nfmt(n)+' '+plural(n,'вариант','варианта','вариантов');if(fmt==='week'&&numeric)return 'Неделя №'+nfmt(n);if(fmt==='rank'&&numeric)return 'Место №'+nfmt(n);if(fmt==='days'&&numeric)return nfmt(n)+' '+plural(n,'день','дня','дней');if(fmt==='days1'&&numeric)return Number(n).toLocaleString('ru-RU',{maximumFractionDigits:1})+' дн.';if(fmt==='percentage'&&numeric)return Number(n).toLocaleString('ru-RU',{maximumFractionDigits:1,minimumFractionDigits:1})+'%';if(fmt==='score'&&numeric)return Number(n).toLocaleString('ru-RU',{maximumFractionDigits:3});if(fmt==='count'&&numeric)return nfmt(n)+' '+plural(n,'анкета','анкеты','анкет');if(numeric)return nfmt(n);return String(v)}
+function dqCaptionValue(v){return v==null||v===''?'Нет данных':String(v)}
+function diagnosticCountByCode(signals,code){return signals.filter(x=>x.code===code).length}
+function diagnosticCard(s){
+ const t=diagnosticType(s),hasBase=s.baseline!==null&&s.baseline!==undefined&&s.baseline!=='';
+ const baseVal=hasBase?dqVal(s.baseline,t.format):'Нет данных для сравнения';
+ const name=s.schoolId?dqSchool(s):'<b>Весь поток / источник</b>';
+ const lvl=s.level==='error'?'Ошибка':s.level==='warning'?'Проверить':'Информация';
+ const label=s.week!=null?'Неделя №'+nfmt(s.week):'Проверка не привязана к отдельной неделе';
+ const fmt=t.format;
+ let obs=dqVal(s.observed,fmt),baseline=baseVal,foundLabel=t.found,baseLabel=t.baseline;
+ if(s.code==='BURST_RESPONSES'&&!hasBase){baseLabel='Сравнение с прошлыми неделями';baseline='Пока нет данных прошлых недель (действует абсолютный порог)'}
+ if(s.code==='NEW_SCHOOL_ID'){obs=dqVal(s.observed,'week');baseline=dqVal(s.baseline,'week')}
+ if(s.code==='NO_RECENT_RESPONSES'){obs=dqVal(s.observed,'days');baseline=dqVal(s.baseline,'days')}
+ const technical=`Код проверки: ${esc(s.code||'—')}${s.sampleSize!=null?' · Число анкет в выборке: '+nfmt(s.sampleSize):''}`;
+ return `<article class="dq-card"><div class="dq-card-top"><h4>${esc(t.name)}</h4><span class="level ${esc(s.level||'info')}">${lvl}</span></div><div class="dq-card-school">${name}</div><div class="dq-card-values"><div class="dq-card-value"><div class="dt">${esc(foundLabel)}</div><div class="dd ${String(obs).length>24?'long':''}">${esc(obs)}</div></div><div class="dq-card-value"><div class="dt">${esc(baseLabel)}</div><div class="dd ${String(baseline).length>24?'long':''}">${esc(baseline)}</div></div></div><p class="dq-card-explain">${esc(t.explain)}</p><p class="dq-card-next"><b>Что проверить:</b> ${esc(t.action)}</p><div class="dq-card-period">${esc(label)}</div><details><summary>Технические детали</summary><p>${technical}</p></details></article>`
+}
+function qualityFilteredRows(){const q=state.data.dataQuality?.signals||[];return q.filter(s=>(state.dqLevel==='all'||s.level===state.dqLevel)&&(state.dqCategory==='all'||s.category===state.dqCategory)&&(state.dqCode==='all'||s.code===state.dqCode)).sort((a,b)=>({error:0,warning:1,info:2}[a.level]??3)-({error:0,warning:1,info:2}[b.level]??3)||String(a.code||'').localeCompare(String(b.code||''),'ru')||Number(a.schoolId||0)-Number(b.schoolId||0))}
+function renderDqCards(){const box=document.getElementById('dqCards');if(!box)return;const rows=qualityFilteredRows();document.getElementById('dqResults').textContent=`Найдено ${nfmt(rows.length)} ${plural(rows.length,'сигнал','сигнала','сигналов')} проверки`;box.innerHTML=rows.length?rows.map(diagnosticCard).join(''):'<div class="empty">По выбранным фильтрам ничего не найдено. Измените тип сигнала или важность.</div>'}
+function qualityGlossary(signals){const codes=[...new Set(signals.map(s=>s.code))].sort((a,b)=>diagnosticType({code:a}).name.localeCompare(diagnosticType({code:b}).name,'ru'));return `<details class="dq-glossary"><summary>Что означают типы проверок? Справочник (${codes.length})</summary><div class="dq-glossary-list">${codes.map(code=>{const t=diagnosticType({code});return `<div class="dq-glossary-item"><b>${esc(t.name)}</b><p>${esc(t.explain)}</p><p><b>Что проверить:</b> ${esc(t.action)}</p></div>`}).join('')}</div></details>`}
+function renderQuality(){
+ const q=state.data.dataQuality||{signals:[],structure:{}},all=q.signals||[],el=document.getElementById('view-quality');
+ const cats=[...new Set(all.map(s=>s.category))].sort(),codes=[...new Set(all.map(s=>s.code))].sort((a,b)=>diagnosticType({code:a}).name.localeCompare(diagnosticType({code:b}).name,'ru'));
+ // Data-quality sourceRow checks include rows with an unrecognized flow; these cannot be attributed to flow 40 alone.
+ const invalid=q.structure?.invalidRows,parse=q.structure?.schoolParseErrors;
+ el.innerHTML=`<div class="dq-intro"><strong>Это не жалобы учеников на рекламу.</strong> Здесь автоматические проверки структуры анкет, активности ответов, оценок и рейтинга. Необычный показатель — повод разобраться, а не доказательство нарушения.</div><div class="dq-kpis"><div class="card dq-kpi"><div class="dq-kpi-title">Ошибки проверки</div><div class="n">${nfmt(q.errors)}</div><div class="dq-kpi-desc">Обнаруженные критические признаки</div></div><div class="card dq-kpi"><div class="dq-kpi-title">Нужно проверить</div><div class="n">${nfmt(q.warnings)}</div><div class="dq-kpi-desc">Ситуации, заслуживающие внимания</div></div><div class="card dq-kpi"><div class="dq-kpi-title">Информация</div><div class="n">${nfmt(q.info)}</div><div class="dq-kpi-desc">Наблюдения, не обязательно ошибки</div></div><div class="card dq-kpi"><div class="dq-kpi-title">Проверка исходных строк</div><div class="n">${invalid==null?'—':nfmt(invalid)}</div><div class="dq-kpi-desc">Строки с замечаниями по данным API; не равно числу ошибочных анкет школы</div></div></div><details class="dq-structure"><summary>Как понимать проверку исходных строк и распознавание школы?</summary><div class="raw-numbers"><span>Строк с замечаниями: <b>${invalid==null?'—':nfmt(invalid)}</b></span><span>Не удалось определить номер школы: <b>${parse==null?'—':nfmt(parse)}</b></span></div><p>Это результаты проверки всех исходных строк, переданные Google Apps Script. Для распознавания школы код пытается извлечь номер из значения поля «Выберите школу». Строки, где не распознан номер потока, также учитываются в общей проверке и не могут быть приписаны конкретному потоку. Число 24 999 (если оно показано) не означает 24 999 подтверждённых нарушений. Чтобы объяснить причины такого большого количества, нужна проверка исходных строк и алгоритма распознавания на стороне Apps Script.</p></details><div class="dq-quality-head"><h3>Диагностические сигналы</h3><p>Выберите тип проверки, чтобы увидеть все школы с одинаковым признаком. Каждая карточка поясняет единицы измерения и ориентир для сравнения.</p></div>${qualityGlossary(all)}<div class="dq-filters"><label class="dq-field"><span>Тип диагностического сигнала</span><select id="dqCode" class="select"><option value="all">Все типы (${nfmt(all.length)})</option>${codes.map(code=>`<option value="${esc(code)}">${esc(diagnosticType({code}).name)} (${diagnosticCountByCode(all,code)})</option>`).join('')}</select></label><label class="dq-field"><span>Категория</span><select id="dqCategory" class="select"><option value="all">Все категории</option>${cats.map(c=>`<option value="${esc(c)}">${esc(categoryNames[c]||c)}</option>`).join('')}</select></label><div class="dq-field"><span>Важность</span><div class="dq-levels" role="group" aria-label="Важность диагностического сигнала"><button type="button" data-level="all">Все</button><button type="button" data-level="error">Ошибки</button><button type="button" data-level="warning">Проверить</button><button type="button" data-level="info">Информация</button></div></div><div id="dqResults" class="dq-result-count" aria-live="polite"></div></div><div class="dq-cards" id="dqCards"></div>`;
+ el.querySelector('#dqCode').value=state.dqCode||'all';el.querySelector('#dqCategory').value=state.dqCategory||'all';
+ el.querySelector('#dqCode').onchange=e=>{state.dqCode=e.target.value;renderDqCards()};
+ el.querySelector('#dqCategory').onchange=e=>{state.dqCategory=e.target.value;renderDqCards()};
+ el.querySelectorAll('[data-level]').forEach(b=>{b.setAttribute('aria-pressed',String(b.dataset.level===state.dqLevel));b.onclick=()=>{state.dqLevel=b.dataset.level;el.querySelectorAll('[data-level]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));renderDqCards()}});
+ renderDqCards();
+}
 
 function renderMethod(){const d=state.data,detail=d.config?.signalDetailVersion;document.getElementById('view-method').innerHTML=`<div class="hero"><h2>Как читать сигналы</h2><p>Короткое пояснение терминов и расчётов сайта №2.</p></div><div class="card method"><h3>Что считается сигналом</h3><p><b>Сигнал</b> — анкета, где участник отметил хотя бы один из двух пунктов: просьбу подписаться на соцсети или наличие скрытой / явной рекламы, продажи продукта, услуги или сервиса. Если в одной анкете отмечены оба пункта, это всё равно одна анкета с сигналом.</p><h3>Зачем нужна разбивка по занятиям</h3><p>Общее число за поток может скрывать концентрацию в конкретный день. Поэтому рядом со школой показываются занятия и количество сигналов на каждом из них. Это позволяет быстро увидеть, например: «на занятиях 1 и 2 было по пять сигналов, дальше — единичные».</p><h3>Что означает «доля»</h3><p>Доля = число анкет с сигналом / все анкеты этой школы или занятия. Поэтому одинаковые пять сигналов могут иметь разный вес при 20 и при 200 ответах.</p><h3>Это не рейтинг и не автоматическое нарушение</h3><p>Сигналы <b>не влияют на рейтинг школы</b>. Они показывают, куда руководителю стоит посмотреть. Решение о том, была ли проблема, принимается после проверки контекста.</p><h3>Каких данных здесь нет</h3><p>Сайт не публикует текстовые комментарии и персональные ответы участников. Сейчас используются только агрегированные ответы на структурированные вопросы.</p><div class="rules"><div class="rule"><b>Период:</b><br>весь текущий поток</div><div class="rule"><b>Детализация:</b><br>${detail?'по занятиям включена':'нужно обновление API для разбивки по занятиям'}</div></div></div>`}
 

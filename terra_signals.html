@@ -63,6 +63,59 @@ button,input,select{font:inherit}.app{width:100%;max-width:1320px;margin:0 auto;
 }
 @media(max-width:580px){.signal-row{grid-template-columns:minmax(0,1fr) 68px}}
 
+
+/* v2.3 — header lesson numbers, values only, precise numerical alignment */
+.lesson-head-note,.lesson-index,.lesson-separator{display:none}
+.lesson-header{min-width:0;display:block}
+.lesson-header-title{display:block;text-align:center;font-weight:700;line-height:1.35}
+.lesson-column-heads,.lesson-mobile-grid{
+  display:grid;grid-template-columns:repeat(var(--lesson-count),var(--lesson-cell));
+  gap:4px;width:max-content;
+}
+.lesson-column-heads{margin-top:7px}
+.lesson-column-heads>span,.lesson-mobile-grid>span{
+  display:flex;align-items:center;justify-content:center;
+  min-width:0;font-variant-numeric:tabular-nums;
+  font-size:11px;font-weight:650;color:var(--muted)
+}
+.lesson-mobile-head{display:none}
+.lesson-lane{gap:4px;grid-template-columns:repeat(var(--lesson-count),var(--lesson-cell))}
+.lesson-slot,.lesson-slot.hot,.lesson-slot.empty,.lesson-slot.zero,.lesson-slot.has-signals{
+  background:transparent;border:0;box-shadow:none;border-radius:0;
+  min-width:0;min-height:30px;padding:4px 0;
+  display:flex;justify-content:center;align-items:center;
+  color:var(--ink)
+}
+.lesson-slot.hot{color:var(--warn)}
+.lesson-slot.zero,.lesson-slot.empty{color:var(--muted)}
+.lesson-count,.lesson-slot.empty .lesson-count{
+  display:block;width:2.8ch;text-align:right;margin:0 auto;
+  font-variant-numeric:tabular-nums;font-size:14px;font-weight:590;
+  line-height:1.35;
+}
+.lesson-slot.hot .lesson-count{font-weight:750}
+.lesson-slot.empty .lesson-count{font-weight:400}
+@media(min-width:1001px){
+  .signal-head>span:nth-child(n+2):nth-child(-n+7){text-align:center}
+  .signal-row>.signals .metric-cell,
+  .signal-row>.secondary .metric-cell{
+    display:flex;align-items:center;justify-content:center;
+  }
+  .signal-row>.signals .metric-cell strong,
+  .signal-row>.secondary .metric-cell strong{
+    display:block;min-width:4.6ch;text-align:right;
+    font-variant-numeric:tabular-nums
+  }
+  .signal-row>.secondary .metric-cell.rate strong{min-width:5.4ch}
+}
+@media(max-width:1000px){
+  .lesson-mobile-head{display:block;margin-bottom:5px}
+  .lesson-mobile-title{display:block;text-transform:uppercase;color:var(--muted);
+    font-size:9px;font-weight:650;letter-spacing:.035em;margin-bottom:4px}
+  .lesson-mobile-grid>span{font-size:10px}
+  .signal-row>.lessons{min-width:0;overflow-x:auto}
+}
+
 </style>
 </head>
 <body>
@@ -136,11 +189,11 @@ function showLoadError(e){console.error(e);const box=document.getElementById('up
 
 function signalTip(){return 'Сигнал — анкета, где участник отметил просьбу подписаться на соцсети или рекламу / продажи на занятии. Одна анкета считается одним сигналом, даже если отмечены оба пункта.'}
 function lessonColumns(rows){const found=new Set();(rows||[]).forEach(r=>(r.lessonBreakdown||[]).forEach(x=>{const n=Number(x.lesson);if(x.lesson==null||!Number.isFinite(n)||!Number.isInteger(n))found.add('unknown');else found.add(n)}));const sorted=[...found].filter(x=>x!=='unknown').sort((a,b)=>a-b);if(sorted.length){const min=sorted[0],max=sorted[sorted.length-1];if(max-min<=30){const from=min>=1&&max<=20?1:min;for(let i=from;i<=max;i++)found.add(i)}}const result=[...found].filter(x=>x!=='unknown').sort((a,b)=>a-b);if(found.has('unknown'))result.push('unknown');return result}
-function lessonChips(r,cols){const arr=Array.isArray(r.lessonBreakdown)?r.lessonBreakdown:[];if(!cols.length)return `<span class="no-detail">${state.data.config?.signalDetailVersion?'Нет разбивки по занятиям':'Разбивка появится после обновления API'}</span>`;const byLesson=new Map(arr.map(x=>[x.lesson==null?'unknown':Number(x.lesson),x]));return `<div class="lesson-lane" style="--lesson-count:${cols.length}">${cols.map(id=>{const x=byLesson.get(id),n=x?Number(x.flaggedResponses||0):null;const number=id==='unknown'?'?':id;const display=n==null?'—':n;const title=x?`Занятие ${number}: ${n} ${plural(n,'сигнал','сигнала','сигналов')}, ${x.responses} ответов`:`Занятие ${number}: сигналов в полученной разбивке нет`;return `<span class="lesson-slot ${n==null?'empty':n>=5?'hot':n===0?'zero':'has-signals'}" title="${esc(title)}" aria-label="${esc(title)}"><span class="lesson-index">${number}</span><span class="lesson-separator">·</span><b class="lesson-count">${display}</b></span>`}).join('')}</div>`}
+function lessonChips(r,cols){const arr=Array.isArray(r.lessonBreakdown)?r.lessonBreakdown:[];if(!cols.length)return `<span class="no-detail">${state.data.config?.signalDetailVersion?'Нет разбивки по занятиям':'Разбивка появится после обновления API'}</span>`;const byLesson=new Map(arr.map(x=>[x.lesson==null?'unknown':Number(x.lesson),x]));return `<div class="lesson-mobile-head" style="--lesson-count:${cols.length}"><span class="lesson-mobile-title">По занятиям</span><div class="lesson-mobile-grid">${cols.map(id=>`<span>${id==='unknown'?'?':id}</span>`).join('')}</div></div><div class="lesson-lane" style="--lesson-count:${cols.length}">${cols.map(id=>{const x=byLesson.get(id),n=x?Number(x.flaggedResponses||0):null;const number=id==='unknown'?'?':id;const display=n==null?'—':n;const title=x?`Занятие ${number}: ${n} ${plural(n,'сигнал','сигнала','сигналов')}, ${x.responses} ответов`:`Занятие ${number}: сигналов в полученной разбивке нет`;return `<span class="lesson-slot ${n==null?'empty':n>=5?'hot':n===0?'zero':'has-signals'}" title="${esc(title)}" aria-label="${esc(title)}"><span class="lesson-count">${display}</span></span>`}).join('')}</div>`}
 function schoolHtml(r){return `<div class="school-title">№${r.schoolId} · ${esc(r.displayName)}${r.isTop?'<span class="top-badge">ТОП</span>':''}</div><span class="leader">${esc(r.leaderName||'')}</span>`}
 function metric(label,value,cls=''){return `<div class="metric-cell ${cls}"><span class="metric-label">${label}</span><strong>${value}</strong></div>`}
 function getSignalRows(){const ps=state.data.participantSignals?.cup;let rows=(ps?.allSchools||[]).slice();const q=state.search.trim().toLowerCase();rows=rows.filter(r=>Number(r.flaggedResponses)>=state.signalMin).filter(r=>!q||String(r.schoolId).includes(q)||String(r.displayName||'').toLowerCase().includes(q)||String(r.leaderName||'').toLowerCase().includes(q));if(state.signalSort==='rate')rows.sort((a,b)=>Number(b.flaggedRatePct)-Number(a.flaggedRatePct)||Number(b.flaggedResponses)-Number(a.flaggedResponses));else if(state.signalSort==='school')rows.sort((a,b)=>Number(a.schoolId)-Number(b.schoolId));else rows.sort((a,b)=>Number(b.flaggedResponses)-Number(a.flaggedResponses)||Number(b.flaggedRatePct)-Number(a.flaggedRatePct));return rows}
-function renderSignalList(){const box=document.getElementById('signalList');if(!box)return;const rows=getSignalRows();if(!rows.length){box.innerHTML='<div class="empty">Нет школ по выбранному фильтру</div>';return}const allRows=state.data.participantSignals?.cup?.allSchools||[];const cols=lessonColumns(allRows),width=Math.max(170,cols.length*47+Math.max(0,cols.length-1)*4);box.style.setProperty('--lesson-width',width+'px');box.innerHTML=`<div class="signal-head"><span>Школа</span><span>Сигналов</span><span>Ответов</span><span>Доля</span><span>Соцсети</span><span>Продажи</span><span>Оба</span><span>По занятиям<small class="lesson-head-note">№ занятия · сигналов</small></span></div>${rows.map(r=>`<div class="signal-row" data-school="${r.schoolId}" tabindex="0" role="button" aria-label="Открыть детализацию школы №${r.schoolId}"><div class="school">${schoolHtml(r)}</div><div class="signals">${metric('Сигналов',r.flaggedResponses)}</div><div class="secondary">${metric('Ответов',r.responses)}${metric('Доля',pct100(r.flaggedRatePct),'rate')}${metric('Соцсети',r.socialSubscriptions)}${metric('Продажи',r.salesAdvertising)}${metric('Оба',r.bothFlags)}</div><div class="lessons">${lessonChips(r,cols)}</div></div>`).join('')}`;box.querySelectorAll('.signal-row').forEach(row=>{const open=()=>openSchool(Number(row.dataset.school));row.addEventListener('click',open);row.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open()}})})}
+function renderSignalList(){const box=document.getElementById('signalList');if(!box)return;const rows=getSignalRows();if(!rows.length){box.innerHTML='<div class="empty">Нет школ по выбранному фильтру</div>';return}const allRows=state.data.participantSignals?.cup?.allSchools||[];const cols=lessonColumns(allRows),width=Math.max(170,cols.length*47+Math.max(0,cols.length-1)*4);box.style.setProperty('--lesson-width',width+'px');box.innerHTML=`<div class="signal-head"><span>Школа</span><span>Сигналов</span><span>Ответов</span><span>Доля</span><span>Соцсети</span><span>Продажи</span><span>Оба</span><span class="lesson-header"><span class="lesson-header-title">По занятиям</span><span class="lesson-column-heads" style="--lesson-count:${cols.length}">${cols.map(id=>`<span>${id==='unknown'?'?':id}</span>`).join('')}</span></span></div>${rows.map(r=>`<div class="signal-row" data-school="${r.schoolId}" tabindex="0" role="button" aria-label="Открыть детализацию школы №${r.schoolId}"><div class="school">${schoolHtml(r)}</div><div class="signals">${metric('Сигналов',r.flaggedResponses)}</div><div class="secondary">${metric('Ответов',r.responses)}${metric('Доля',pct100(r.flaggedRatePct),'rate')}${metric('Соцсети',r.socialSubscriptions)}${metric('Продажи',r.salesAdvertising)}${metric('Оба',r.bothFlags)}</div><div class="lessons">${lessonChips(r,cols)}</div></div>`).join('')}`;box.querySelectorAll('.signal-row').forEach(row=>{const open=()=>openSchool(Number(row.dataset.school));row.addEventListener('click',open);row.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open()}})})}
 function kpi(label,value,sub,help=''){return `<div class="card kpi"><div class="label">${label}${help?` <button class="info-dot" type="button" data-tip="${esc(help)}">i</button>`:''}</div><div class="value">${value}</div><div class="sub">${sub||''}</div></div>`}
 function renderSignals(){const d=state.data,ps=d.participantSignals?.cup||{summary:{},allSchools:[]},s=ps.summary||{},el=document.getElementById('view-signals');const from=d.flow?.flowStart,to=String(d.meta?.sourceLastResponseAt||'').slice(0,10);const flaggedRate=Number(s.responses)?100*Number(s.flaggedResponses||0)/Number(s.responses):0;el.innerHTML=`<div class="hero"><h2>Сигналы за весь поток</h2><p>Школы отсортированы по числу сигналов. В колонке «По занятиям» сразу видно, на каких занятиях они концентрируются. Нажмите на школу для подробной разбивки.</p><div class="period-chip">Поток ${d.flow.id} · ${dateRu(from)} — ${dateRu(to)}</div></div><div class="toolbar"><input class="input" id="signalSearch" placeholder="Найти школу по названию, руководителю или №"><select class="select" id="signalMin"><option value="1">Все школы с сигналами</option><option value="2">2+ сигнала</option><option value="3">3+ сигнала</option><option value="5">5+ сигналов</option><option value="10">10+ сигналов</option></select><select class="select" id="signalSort"><option value="count">Сначала больше сигналов</option><option value="rate">Сначала выше доля</option><option value="school">По номеру школы</option></select></div><div class="table-note">${signalTip()} Это рабочий индикатор для проверки ситуации, а не автоматический вывод о нарушении.</div><div class="card signal-list" id="signalList"></div><div class="summary-head"><div><h3>Сводка по потоку</h3><p>Общие числа вынесены вниз, чтобы первый экран оставался рабочим списком школ.</p></div></div><div class="kpis">${kpi('Анкет с сигналом',nfmt(s.flaggedResponses),`${pct100(flaggedRate)} всех ответов`,signalTip())}${kpi('Школ с сигналами',nfmt(s.flaggedSchools||ps.allSchools.length),'хотя бы 1 сигнал')}${kpi('Соцсети',nfmt(s.socialSubscriptions),'отмечена просьба подписаться')}${kpi('Продажи / реклама',nfmt(s.salesAdvertising),'отмечена реклама или продажа')}${kpi('Оба пункта',nfmt(s.bothFlags),'соцсети и реклама в одной анкете')}</div>`;const search=el.querySelector('#signalSearch'),min=el.querySelector('#signalMin'),sort=el.querySelector('#signalSort');search.value=state.search;min.value=String(state.signalMin);sort.value=state.signalSort;search.oninput=e=>{state.search=e.target.value;renderSignalList()};min.onchange=e=>{state.signalMin=Number(e.target.value);renderSignalList()};sort.onchange=e=>{state.signalSort=e.target.value;renderSignalList()};renderSignalList();bindTips(el)}
 

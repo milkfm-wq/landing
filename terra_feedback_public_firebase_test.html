@@ -135,7 +135,17 @@ async function loadLiveData(){
     const response=await fetch(TERRA_PUBLIC_FB_URL,{method:'GET',cache:'no-store',signal:controller.signal,headers:{Accept:'application/json'}});
     if(!response.ok)throw new Error('Firebase пока не предоставляет public JSON (HTTP '+response.status+'). Сначала опубликуйте public и разрешите чтение /published/flow40/public.');
     const data=await response.json();
-    if(!data||typeof data!=='object'||data.view!=='public'||data.schemaVersion!=='1.5'||Number(data.flow?.id)!==40||!data.meta?.generatedAt||!data.schools||!data.periods)throw new Error('Firebase вернул пустой или несовместимый JSON публичного рейтинга.');
+    if(!data || typeof data!=='object')throw new Error('Ответ Firebase пустой или не является объектом JSON.');
+    if(data.view!=='public')throw new Error('Поле view: ожидалось public, получено '+String(data.view));
+    if(data.schemaVersion!=='1.5')throw new Error('Поле schemaVersion: ожидалось 1.5, получено '+String(data.schemaVersion));
+    if(Number(data.flow?.id)!==40)throw new Error('Поле flow.id: ожидалось 40, получено '+String(data.flow?.id));
+    if(!data.meta?.generatedAt)throw new Error('Нет meta.generatedAt в полном JSON Firebase.');
+    if(!data.schools || typeof data.schools!=='object')throw new Error('Нет раздела schools в полном JSON Firebase.');
+    if(!data.periods || typeof data.periods!=='object')throw new Error('Нет раздела periods в полном JSON Firebase.');
+    if(!data.periods.previousWeek || !data.periods.cup)throw new Error('Отсутствует periods.previousWeek или periods.cup.');
+    if(!data.nominations)throw new Error('Отсутствует раздел nominations.');
+    if(!data.config)throw new Error('Отсутствует раздел config.');
+    console.info('TERRA Firebase public response validated', {generatedAt:data.meta.generatedAt, schools:Object.keys(data.schools).length, view:data.view});
     return data;
   }catch(err){
     if(err&&err.name==='AbortError')throw new Error('Firebase не ответил в течение 12 секунд.');
@@ -143,7 +153,18 @@ async function loadLiveData(){
   }finally{clearTimeout(timer)}
 }
 function liveStatus(d){const rows=new Intl.NumberFormat('ru-RU').format(d.meta?.sourceRows||0);return `<div class="ready"><span class="ready-dot"></span>Данные готовы</div><div>Обновлено ${shortStamp(d.meta?.generatedAt)} МСК</div><div>Последний ответ ${shortStamp(d.meta?.sourceLastResponseAt)} МСК · ${rows} строк</div>`}
-function showLoadError(e){console.error(e);document.getElementById('updated').innerHTML='<b>Не удалось подключиться к данным</b>';document.querySelector('main').innerHTML='<div class="errorbox"><b>Актуальные данные не загрузились после нескольких попыток.</b><br>Старый снимок по-прежнему не показывается. Можно повторить подключение без ожидания.<br><button class="retry-btn" type="button" onclick="location.reload()">Повторить загрузку</button></div>'}
+function showLoadError(e){
+ console.error('TERRA Firebase public load/render failed:',e);
+ document.getElementById('updated').textContent='Ошибка загрузки или отображения';
+ const main=document.querySelector('main');
+ main.replaceChildren();
+ const panel=document.createElement('div');panel.className='errorbox';
+ const h=document.createElement('b');h.textContent='Тестовая страница: не удалось показать данные Firebase';panel.appendChild(h);
+ const reason=document.createElement('p');reason.style.margin='12px 0 4px';reason.textContent='Причина: '+String(e?.message||e||'неизвестная ошибка');panel.appendChild(reason);
+ const context=document.createElement('p');context.style.margin='8px 0 12px';context.textContent='Публичные метаданные уже доступны. Эта ошибка относится к загрузке полного JSON либо отображению рейтингов. Основной сайт не затронут.';panel.appendChild(context);
+ const retry=document.createElement('button');retry.className='retry-btn';retry.type='button';retry.textContent='Повторить загрузку';retry.onclick=()=>location.reload();panel.appendChild(retry);
+ main.appendChild(panel);
+}
 
 function priorWeekRankMap(){const d=state.data;const targetWeek=d.flow.completedWeeks-1;if(targetWeek<1)return new Map();const rows=[];Object.values(d.schools).forEach(s=>{const t=(s.weeklyTrend||[]).find(x=>Number(x.week)===targetWeek);if(t&&Number(t.responses)>=WEEK_MIN_RESPONSES&&t.score!=null)rows.push({schoolId:Number(s.schoolId),score:Number(t.score),responses:Number(t.responses)})});rows.sort((a,b)=>b.score-a.score||b.responses-a.responses||a.schoolId-b.schoolId);return new Map(rows.map((r,i)=>[r.schoolId,{rank:i+1,score:r.score}]))}
 function buildWeeklyPeriod(){const d=state.data,base=d.periods.previousWeek,prev=priorWeekRankMap();const ranked=[],unranked=[];Object.values(d.schools).forEach(s=>{const m=s.periodMetrics?.previousWeek||{};const responses=Number(m.responses||0);if(!responses)return;const score=m.score==null?null:Number(m.score);const meta={schoolId:Number(s.schoolId),displayName:s.displayName,leaderName:s.leaderName,isTop:!!s.isTop,responses,minResponses:WEEK_MIN_RESPONSES,responsesMissing:Math.max(0,WEEK_MIN_RESPONSES-responses),score};if(responses>=WEEK_MIN_RESPONSES&&score!=null)ranked.push(meta);else unranked.push({...meta,referenceScore:responses>=5?score:null,referenceScoreVisible:responses>=5})});ranked.sort((a,b)=>b.score-a.score||b.responses-a.responses||a.schoolId-b.schoolId);ranked.forEach((r,i)=>{r.rank=i+1;const p=prev.get(r.schoolId);r.previousRank=p?.rank||null;r.scoreDelta=p?Number(r.score)-Number(p.score):null;r.positionChange=p?p.rank-r.rank:null;r.isEligible=true});unranked.sort((a,b)=>b.responses-a.responses||a.schoolId-b.schoolId);return {...base,minResponses:WEEK_MIN_RESPONSES,fullRanking:ranked,unrankedSchools:unranked,top7:ranked.slice(0,TOP_LIMIT),summary:{...base.summary,rankedSchools:ranked.length,unrankedSchools:unranked.length}}}

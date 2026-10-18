@@ -126,6 +126,28 @@ const state={data:null,tab:'topWeek',schoolId:null};
 
 function wait(ms){return new Promise(resolve=>setTimeout(resolve,ms))}
 function loadJsonpOnce(url,timeoutMs,attempt){return new Promise((resolve,reject)=>{const callback='__terra_public_callback';const script=document.createElement('script');let done=false;const timer=setTimeout(()=>finish(new Error('JSONP timeout')),timeoutMs);function finish(err,data){if(done)return;done=true;clearTimeout(timer);script.remove();if(err){window[callback]=function(){};setTimeout(()=>{try{delete window[callback]}catch(_){}},60000);reject(err)}else{try{delete window[callback]}catch(_){}resolve(data)}}window[callback]=data=>finish(null,data);script.onerror=()=>finish(new Error('JSONP network error'));script.async=true;script.referrerPolicy='no-referrer';const sep=url.includes('?')?'&':'?';const bucket=Math.floor(Date.now()/300000);script.src=url+sep+'callback='+callback+'&v='+bucket+(attempt?'&retry='+attempt:'');document.head.appendChild(script)})}
+/**
+ * Firebase Realtime Database can serialize numeric-key objects as sparse
+ * arrays containing null. Normalize collections back to keyed school records.
+ * No ranking values or formulas are changed.
+ */
+function normalizeFirebasePublicData(data){
+ const entries=Object.entries(data.schools).filter(([,school])=>school!==null&&typeof school==='object'&&!Array.isArray(school));
+ if(!entries.length)throw new Error('Firebase вернул список школ без заполненных записей.');
+ data.schools=Object.fromEntries(entries.map(([id,school])=>{
+   if(Array.isArray(school.weeklyTrend)){
+     school.weeklyTrend=school.weeklyTrend.filter(row=>row!==null&&typeof row==='object'&&!Array.isArray(row));
+   }
+   return [id,school];
+ }));
+ for(const period of Object.values(data.periods)){
+   if(!period||typeof period!=='object')continue;
+   for(const field of ['fullRanking','unrankedSchools','top7']){
+     if(Array.isArray(period[field]))period[field]=period[field].filter(row=>row!==null&&typeof row==='object'&&!Array.isArray(row));
+   }
+ }
+ return data;
+}
 const TERRA_PUBLIC_FB_URL='https://terra-dashboards-default-rtdb.europe-west1.firebasedatabase.app/published/flow40/public.json';
 async function loadLiveData(){
   if(FLOW!==40)throw new Error('Тестовая Firebase-версия поддерживает только поток 40.');
@@ -145,6 +167,7 @@ async function loadLiveData(){
     if(!data.periods.previousWeek || !data.periods.cup)throw new Error('Отсутствует periods.previousWeek или periods.cup.');
     if(!data.nominations)throw new Error('Отсутствует раздел nominations.');
     if(!data.config)throw new Error('Отсутствует раздел config.');
+    normalizeFirebasePublicData(data);
     console.info('TERRA Firebase public response validated', {generatedAt:data.meta.generatedAt, schools:Object.keys(data.schools).length, view:data.view});
     return data;
   }catch(err){

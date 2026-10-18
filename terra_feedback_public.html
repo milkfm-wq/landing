@@ -126,9 +126,83 @@ const state={data:null,tab:'topWeek',schoolId:null};
 
 function wait(ms){return new Promise(resolve=>setTimeout(resolve,ms))}
 function loadJsonpOnce(url,timeoutMs,attempt){return new Promise((resolve,reject)=>{const callback='__terra_public_callback';const script=document.createElement('script');let done=false;const timer=setTimeout(()=>finish(new Error('JSONP timeout')),timeoutMs);function finish(err,data){if(done)return;done=true;clearTimeout(timer);script.remove();if(err){window[callback]=function(){};setTimeout(()=>{try{delete window[callback]}catch(_){}},60000);reject(err)}else{try{delete window[callback]}catch(_){}resolve(data)}}window[callback]=data=>finish(null,data);script.onerror=()=>finish(new Error('JSONP network error'));script.async=true;script.referrerPolicy='no-referrer';const sep=url.includes('?')?'&':'?';const bucket=Math.floor(Date.now()/300000);script.src=url+sep+'callback='+callback+'&v='+bucket+(attempt?'&retry='+attempt:'');document.head.appendChild(script)})}
-async function loadLiveData(){const url=apiUrl(API_BASE,FLOW,API_VIEW);const timeouts=[15000,22000,30000,40000];let lastError=null;for(let i=0;i<timeouts.length;i++){if(i>0){document.getElementById('updated').innerHTML='<div class="ready"><span class="ready-dot"></span>Повторное подключение к данным</div><div>Попытка '+(i+1)+' из '+timeouts.length+'</div>'}try{const data=await loadJsonpOnce(url,timeouts[i],i);if(!data||typeof data!=='object')throw new Error('Пустой ответ API');if(data.error)throw new Error(data.message||data.error);return data}catch(err){lastError=err;if(i<timeouts.length-1)await wait(700*Math.pow(2,i))}}throw lastError||new Error('Не удалось загрузить данные')}
+/**
+ * Firebase Realtime Database can serialize numeric-key objects as sparse
+ * arrays containing null. Normalize collections back to keyed school records.
+ * No ranking values or formulas are changed.
+ */
+function normalizeFirebasePublicData(data){
+ const entries=Object.entries(data.schools).filter(([,school])=>school!==null&&typeof school==='object'&&!Array.isArray(school));
+ if(!entries.length)throw new Error('Firebase вернул список школ без заполненных записей.');
+ data.schools=Object.fromEntries(entries.map(([id,school])=>{
+   if(Array.isArray(school.weeklyTrend)){
+     school.weeklyTrend=school.weeklyTrend.filter(row=>row!==null&&typeof row==='object'&&!Array.isArray(row));
+   }
+   return [id,school];
+ }));
+ for(const period of Object.values(data.periods)){
+   if(!period||typeof period!=='object')continue;
+   for(const field of ['fullRanking','unrankedSchools','top7']){
+     if(Array.isArray(period[field]))period[field]=period[field].filter(row=>row!==null&&typeof row==='object'&&!Array.isArray(row));
+   }
+ }
+ return data;
+}
+const TERRA_PUBLIC_FB_URL='https://terra-dashboards-default-rtdb.europe-west1.firebasedatabase.app/published/flow40/public.json';
+async function loadLiveData(){
+  if(FLOW!==40)throw new Error('Этот сайт поддерживает Firebase-данные только для потока 40.');
+  const timeouts=[12000,16000];
+  let data;
+  for(let attempt=0;attempt<timeouts.length;attempt++){
+    const controller=new AbortController();
+    const timer=setTimeout(()=>controller.abort(),timeouts[attempt]);
+    try{
+      const response=await fetch(TERRA_PUBLIC_FB_URL,{method:'GET',cache:'no-store',signal:controller.signal,headers:{Accept:'application/json'}});
+      if(!response.ok){
+        const err=new Error('Firebase не предоставляет public JSON (HTTP '+response.status+').');
+        err.retryable=response.status===429||response.status>=500;
+        throw err;
+      }
+      data=await response.json();
+      break;
+    }catch(err){
+      const timedOut=err?.name==='AbortError';
+      const problem=timedOut?new Error('Firebase не ответил за '+Math.round(timeouts[attempt]/1000)+' секунд.'):err;
+      const retryable=timedOut||err?.retryable===true||err instanceof TypeError;
+      if(!retryable||attempt===timeouts.length-1)throw problem;
+      document.getElementById('updated').textContent='Подключение задержалось. Повторяем запрос к Firebase…';
+      console.warn('Firebase public: повторяем загрузку после временного сбоя',problem.message);
+    }finally{
+      clearTimeout(timer);
+    }
+  }
+  if(!data || typeof data!=='object')throw new Error('Ответ Firebase пустой или не является объектом JSON.');
+  if(data.view!=='public')throw new Error('Поле view: ожидалось public, получено '+String(data.view));
+  if(data.schemaVersion!=='1.5')throw new Error('Поле schemaVersion: ожидалось 1.5, получено '+String(data.schemaVersion));
+  if(Number(data.flow?.id)!==40)throw new Error('Поле flow.id: ожидалось 40, получено '+String(data.flow?.id));
+  if(!data.meta?.generatedAt)throw new Error('Нет meta.generatedAt в полном JSON Firebase.');
+  if(!data.schools || typeof data.schools!=='object')throw new Error('Нет раздела schools в полном JSON Firebase.');
+  if(!data.periods || typeof data.periods!=='object')throw new Error('Нет раздела periods в полном JSON Firebase.');
+  if(!data.periods.previousWeek || !data.periods.cup)throw new Error('Отсутствует periods.previousWeek или periods.cup.');
+  if(!data.nominations)throw new Error('Отсутствует раздел nominations.');
+  if(!data.config)throw new Error('Отсутствует раздел config.');
+  normalizeFirebasePublicData(data);
+  console.info('TERRA Firebase public response validated', {generatedAt:data.meta.generatedAt, schools:Object.keys(data.schools).length, view:data.view});
+  return data;
+}
 function liveStatus(d){const rows=new Intl.NumberFormat('ru-RU').format(d.meta?.sourceRows||0);return `<div class="ready"><span class="ready-dot"></span>Данные готовы</div><div>Обновлено ${shortStamp(d.meta?.generatedAt)} МСК</div><div>Последний ответ ${shortStamp(d.meta?.sourceLastResponseAt)} МСК · ${rows} строк</div>`}
-function showLoadError(e){console.error(e);document.getElementById('updated').innerHTML='<b>Не удалось подключиться к данным</b>';document.querySelector('main').innerHTML='<div class="errorbox"><b>Актуальные данные не загрузились после нескольких попыток.</b><br>Старый снимок по-прежнему не показывается. Можно повторить подключение без ожидания.<br><button class="retry-btn" type="button" onclick="location.reload()">Повторить загрузку</button></div>'}
+function showLoadError(e){
+ console.error('TERRA Firebase public load/render failed:',e);
+ document.getElementById('updated').textContent='Ошибка загрузки или отображения';
+ const main=document.querySelector('main');
+ main.replaceChildren();
+ const panel=document.createElement('div');panel.className='errorbox';
+ const h=document.createElement('b');h.textContent='Не удалось показать рейтинг школ';panel.appendChild(h);
+ const reason=document.createElement('p');reason.style.margin='12px 0 4px';reason.textContent='Причина: '+String(e?.message||e||'неизвестная ошибка');panel.appendChild(reason);
+ const context=document.createElement('p');context.style.margin='8px 0 12px';context.textContent='Ошибка возникла при загрузке или отображении рейтингов из Firebase. Повторите попытку чуть позже.';panel.appendChild(context);
+ const retry=document.createElement('button');retry.className='retry-btn';retry.type='button';retry.textContent='Повторить загрузку';retry.onclick=()=>location.reload();panel.appendChild(retry);
+ main.appendChild(panel);
+}
 
 function priorWeekRankMap(){const d=state.data;const targetWeek=d.flow.completedWeeks-1;if(targetWeek<1)return new Map();const rows=[];Object.values(d.schools).forEach(s=>{const t=(s.weeklyTrend||[]).find(x=>Number(x.week)===targetWeek);if(t&&Number(t.responses)>=WEEK_MIN_RESPONSES&&t.score!=null)rows.push({schoolId:Number(s.schoolId),score:Number(t.score),responses:Number(t.responses)})});rows.sort((a,b)=>b.score-a.score||b.responses-a.responses||a.schoolId-b.schoolId);return new Map(rows.map((r,i)=>[r.schoolId,{rank:i+1,score:r.score}]))}
 function buildWeeklyPeriod(){const d=state.data,base=d.periods.previousWeek,prev=priorWeekRankMap();const ranked=[],unranked=[];Object.values(d.schools).forEach(s=>{const m=s.periodMetrics?.previousWeek||{};const responses=Number(m.responses||0);if(!responses)return;const score=m.score==null?null:Number(m.score);const meta={schoolId:Number(s.schoolId),displayName:s.displayName,leaderName:s.leaderName,isTop:!!s.isTop,responses,minResponses:WEEK_MIN_RESPONSES,responsesMissing:Math.max(0,WEEK_MIN_RESPONSES-responses),score};if(responses>=WEEK_MIN_RESPONSES&&score!=null)ranked.push(meta);else unranked.push({...meta,referenceScore:responses>=5?score:null,referenceScoreVisible:responses>=5})});ranked.sort((a,b)=>b.score-a.score||b.responses-a.responses||a.schoolId-b.schoolId);ranked.forEach((r,i)=>{r.rank=i+1;const p=prev.get(r.schoolId);r.previousRank=p?.rank||null;r.scoreDelta=p?Number(r.score)-Number(p.score):null;r.positionChange=p?p.rank-r.rank:null;r.isEligible=true});unranked.sort((a,b)=>b.responses-a.responses||a.schoolId-b.schoolId);return {...base,minResponses:WEEK_MIN_RESPONSES,fullRanking:ranked,unrankedSchools:unranked,top7:ranked.slice(0,TOP_LIMIT),summary:{...base.summary,rankedSchools:ranked.length,unrankedSchools:unranked.length}}}

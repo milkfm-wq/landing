@@ -1,0 +1,649 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<title>TERRA — Продвижение и продажи на занятиях</title>
+<link rel="icon" type="image/svg+xml" href="./terra_favicon.svg?v=5">
+<link rel="shortcut icon" href="./terra_favicon.svg?v=5">
+<style>
+:root{
+ color-scheme:light;
+ --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+ --bg:#f6f4ef;--surface:#fffdfa;--surface-2:#f2f5f0;
+ --line:#e3e5de;--line-strong:#cfd3ca;
+ --ink:#25332f;--ink-2:#56625d;--ink-3:#6b7771;
+ --green:#2f5a43;--green-bg:#dfe9df;--dot-ok:#4c9a6a;--bad:#984b4b;
+ --heat-1-bg:#fbefd6;--heat-1-fg:#6b4a12;--heat-1-bar:#e2b866;
+ --heat-2-bg:#f6d49a;--heat-2-fg:#5c3d08;--heat-2-bar:#e09a3c;
+ --heat-3-bg:#ee9d6a;--heat-3-fg:#2f1a05;--heat-3-bar:#cf5a2e;
+ --cell-zero:#f1f2ee;--bar-track:#ebeee8;--bar-neutral:#b9c0b7;
+ --tag-bg:#efeaf6;--tag-fg:#5f4f7a;--focus:#1681ff;
+ --r-card:14px;--r-ctl:10px;--r-tag:6px;--r-cell:6px;--r-pill:999px;
+ --shadow-card:0 1px 2px rgba(37,51,47,.06)
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;width:100%;max-width:100%;overflow-x:clip}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:14px;line-height:20px}
+body.modal-open{overflow:hidden}
+button,input,select{font-family:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.app{width:100%;max-width:1232px;margin:0 auto;padding:0 12px;min-width:0}
+.visually-hidden{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+.topbar{padding:16px 0 8px;display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.brand{display:contents}
+.brand h1{margin:0;width:100%;font-size:20px;line-height:26px;font-weight:700;letter-spacing:-.01em}
+.header-chip{display:inline-flex;align-items:center;min-height:24px;height:24px;padding:0 10px;border-radius:var(--r-pill);background:var(--green-bg);color:var(--green);font-size:12px;line-height:16px;font-weight:600;white-space:nowrap;max-width:100%;font-variant-numeric:tabular-nums}
+.statusbox{position:relative;display:flex;align-items:center;flex-wrap:wrap;gap:8px;min-width:0;color:var(--ink-2);font-size:12px;line-height:16px}
+.status-title{display:flex;align-items:center;gap:8px;color:var(--ink-2);font-size:12px;line-height:16px;font-weight:400}
+.status-dot{width:8px;height:8px;flex:none;background:var(--dot-ok);border-radius:50%}
+.statusbox.error .status-dot{background:var(--bad)}
+.statusbox.error .status-title{color:var(--bad)}
+.info-dot{display:grid;place-items:center;width:24px;height:24px;padding:0;border:1px solid var(--line-strong);border-radius:50%;background:var(--surface);color:var(--ink-2);font-size:12px;line-height:16px;font-weight:700}
+.info-btn{background:transparent;border:0;color:var(--ink-2);font-size:12px;line-height:16px;text-decoration:underline;text-decoration-style:dotted}
+.info-pop{position:absolute;right:0;top:calc(100% + 8px);z-index:50;width:min(320px,calc(100vw - 24px));padding:12px;border-radius:var(--r-ctl);background:var(--ink);color:var(--surface);font-size:12px;line-height:16px;box-shadow:0 24px 64px rgba(20,35,30,.24)}
+.info-pop[hidden]{display:none}
+.info-pop p{margin:0 0 8px}.info-pop p:last-child{margin:0}
+.load-track{height:4px;width:100px;overflow:hidden;background:var(--bar-track);border-radius:var(--r-pill)}
+.load-track i{display:block;width:45%;height:100%;background:var(--green);animation:loading 1.25s ease-in-out infinite}
+@keyframes loading{0%{transform:translateX(-120%)}60%{transform:translateX(100%)}100%{transform:translateX(270%)}}
+.tabs{display:flex;gap:24px;height:44px;border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;display:flex;align-items:center;height:44px;padding:0 4px;background:none;border:0;color:var(--ink-2);font-size:14px;line-height:20px;font-weight:600;white-space:nowrap}
+.tab.active{color:var(--ink);box-shadow:inset 0 -2px 0 var(--ink)}
+.tab .short{display:none}
+.view{display:none}.view.active{display:block}
+.hero{padding:0}.hero h2{margin:0}.hero p,.hero .period-chip{display:none}
+.toolbar{display:grid;grid-template-columns:1.4fr 1fr;gap:8px;padding:12px 0 0;align-items:center}
+.search-wrap{grid-column:1/-1;position:relative;min-width:0}
+.search-wrap svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--ink-3);pointer-events:none}
+.input,.select{display:block;width:100%;min-width:0;height:44px;padding:0 12px;border:1px solid var(--line-strong);border-radius:var(--r-ctl);background:var(--surface);color:var(--ink);font-size:16px;line-height:24px;font-weight:400}
+.input{padding-left:36px}.input::placeholder{color:var(--ink-3)}
+.segment{display:flex;align-items:center;height:44px;padding:3px;border:1px solid var(--line);border-radius:var(--r-ctl);background:var(--surface-2);min-width:0}
+.segment button{min-width:0;flex:1;height:100%;padding:0 4px;border:0;border-radius:7px;background:transparent;color:var(--ink-2);font-size:15px;line-height:20px;font-weight:600;white-space:nowrap}
+.segment button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+.legend{margin:8px 0 12px;color:var(--ink-2);font-size:12px;line-height:16px}
+.legend-note{margin-bottom:8px}
+.legend-items{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center}
+.legend-item{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.legend-square{display:inline-block;flex:none;width:12px;height:12px;border-radius:3px;border:1px solid transparent}
+.legend-square.zero{background:var(--cell-zero);border-color:var(--line-strong)}
+.legend-square.heat1{background:var(--heat-1-bg)}
+.legend-square.heat2{background:var(--heat-2-bg)}
+.legend-square.heat3{background:var(--heat-3-bg)}
+.legend-square.unknown{background:transparent;border:1px dashed var(--line-strong)}
+.signal-list{min-width:0;--n:1}
+.signal-head{display:none}.signal-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:12px}.signal-desktop{display:none}
+.signal-row{min-width:0;display:block;padding:16px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);box-shadow:var(--shadow-card);cursor:pointer}
+.signal-row:hover .school-title{text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+.signal-row .school-title{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:15px;line-height:20px;font-weight:600}
+.school-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;min-width:0}
+.school-head .title-wrap{min-width:0;flex:1}
+.school-head .rate-block{flex:none;min-width:63px;text-align:right}
+.rate-main{font-size:20px;line-height:24px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+.rate-label{display:block;font-size:11px;line-height:14px;font-weight:500;color:var(--ink-2)}
+.rate-block.low .rate-main,.desktop-rate.low .rate-main{color:var(--ink-2)}
+.school-subline{display:flex;align-items:center;gap:8px;min-width:0;margin-top:4px}
+.leader{display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink-2);font-size:12px;line-height:16px;font-weight:400}
+.school-subline .leader{flex:1}
+.top-badge{display:inline-flex;flex:none;align-items:center;height:18px;padding:0 6px;border-radius:var(--r-tag);background:var(--tag-bg);color:var(--tag-fg);font-size:11px;line-height:14px;font-weight:600;white-space:nowrap}
+.rate-track{width:100%;height:4px;overflow:hidden;background:var(--bar-track);border-radius:2px}
+.rate-fill{height:100%;background:var(--heat-1-bar);border-radius:2px}
+.rate-fill.heat2{background:var(--heat-2-bar)}.rate-fill.heat3{background:var(--heat-3-bar)}
+.rate-fill.low{background:var(--bar-neutral)}
+.card-rate-track{margin-top:12px}
+.meta-line{margin-top:8px;color:var(--ink-2);font-size:13px;line-height:18px;font-weight:400}
+.meta-line b{font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.pill{display:inline-flex;gap:4px;align-items:center;height:24px;padding:0 10px;background:var(--surface-2);color:var(--ink-2);border-radius:var(--r-pill);font-size:12px;line-height:16px;font-weight:500}
+.pill b{font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+.card-lessons{margin-top:12px}
+.lesson-label{margin-bottom:8px;color:var(--ink-2);font-size:11px;line-height:14px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.lesson-grid{display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));gap:2px;justify-content:start;min-width:0;width:min(100%,calc(var(--n) * 42px - 2px))}
+.lesson-number{min-width:0;text-align:center;color:var(--ink-2);font-size:11px;line-height:14px;font-weight:500;font-variant-numeric:tabular-nums}
+.heat-cell{min-width:0;display:flex;align-items:center;justify-content:center;width:100%;height:32px;border-radius:var(--r-cell);background:var(--cell-zero);color:var(--ink-3);font-size:12px;line-height:16px;font-weight:600;font-variant-numeric:tabular-nums}
+.heat-cell.zero{background:var(--cell-zero);color:var(--ink-3);font-weight:400}
+.heat-cell.unknown{background:transparent;border:1px dashed var(--line-strong)}
+.heat-cell.heat1{background:var(--heat-1-bg);color:var(--heat-1-fg)}
+.heat-cell.heat2{background:var(--heat-2-bg);color:var(--heat-2-fg)}
+.heat-cell.heat3{background:var(--heat-3-bg);color:var(--heat-3-fg)}
+.signal-divider{grid-column:1/-1;margin:0;padding:8px 16px;background:var(--surface-2);color:var(--ink-2);font-size:12px;line-height:16px}
+.empty{padding:32px 16px;text-align:center;color:var(--ink-2);font-size:14px;line-height:20px;grid-column:1/-1}
+.summary-head{margin:24px 0 8px}
+.summary-head h3{margin:0;font-size:16px;line-height:22px;font-weight:700}
+.summary-head p{display:none}
+.kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.card,.kpi,.dq-kpi{min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);box-shadow:var(--shadow-card)}
+.kpi{padding:12px}.kpi:last-child{grid-column:1/-1}
+.kpi .label{color:var(--ink-2);font-size:11px;line-height:14px;font-weight:500}
+.kpi .value{margin-top:4px;color:var(--ink);font-size:20px;line-height:24px;font-weight:700;font-variant-numeric:tabular-nums}
+.kpi .sub{color:var(--ink-2);font-size:11px;line-height:14px;margin-top:4px}
+.skeleton{padding:4px}.sk-row{display:grid;grid-template-columns:2fr 1fr;gap:12px;padding:12px;border-bottom:1px solid var(--line)}.sk-row:last-child{border:0}
+.sk{height:14px;border-radius:var(--r-cell);background:var(--bar-track);animation:pulse 1.4s ease-in-out infinite}.sk.tiny{width:70%}.sk.short{width:80%}
+@keyframes pulse{50%{opacity:.35}}
+.errorbox{padding:16px;margin:12px 0;background:var(--surface);border:1px solid var(--bad);border-radius:var(--r-card);color:var(--bad);font-size:14px;line-height:20px}
+.retry-btn{min-height:44px;margin-top:12px;padding:8px 12px;background:var(--surface);border:1px solid var(--bad);border-radius:var(--r-ctl);color:var(--bad);font-weight:600}
+.footer{margin:24px 0 12px;text-align:center;color:var(--ink-2);font-size:11px;line-height:14px}
+.dialog{width:100%;max-width:none;max-height:88vh;margin:auto 0 0;border:0;border-radius:16px 16px 0 0;padding:0;background:var(--surface);color:var(--ink);box-shadow:0 24px 64px rgba(20,35,30,.24);overflow:hidden;animation:slidein 200ms ease-out}
+.dialog::backdrop{background:rgba(24,31,29,.45)}
+@keyframes slidein{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.dialog-handle{display:block;width:36px;height:4px;margin:8px auto 0;background:var(--line-strong);border-radius:2px}
+.dialog-head{position:sticky;top:0;z-index:2;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:16px;background:var(--surface);border-bottom:1px solid var(--line)}
+.dialog-head h3{margin:0;color:var(--ink);font-size:18px;line-height:24px;font-weight:700}
+.dialog-head p{margin:4px 0 0;color:var(--ink-2);font-size:13px;line-height:18px;font-weight:400}
+.close-btn{width:40px;height:40px;flex:none;border:1px solid var(--line);border-radius:var(--r-ctl);background:var(--surface);color:var(--ink);font-size:22px;line-height:24px}
+.dialog-body{padding:16px;overflow-y:auto;max-height:calc(88vh - 105px)}
+.school-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.mini{padding:12px;min-width:0;background:var(--surface-2);border-radius:12px}
+.mini .lab{font-size:11px;line-height:14px;color:var(--ink-2);font-weight:500}
+.mini .val{margin-top:4px;font-size:20px;line-height:24px;color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
+.focus-note{margin:12px 0;padding:10px 12px;border-left:3px solid var(--heat-2-bar);border-radius:8px;background:var(--heat-1-bg);color:var(--heat-1-fg);font-size:13px;line-height:18px}.focus-note b{font-weight:600}
+.lesson-table{width:100%;border-collapse:collapse}
+.lesson-table th,.lesson-table td{padding:10px 12px;border-bottom:1px solid var(--line);font-size:14px;line-height:20px;text-align:left;font-variant-numeric:tabular-nums}
+.lesson-table th{color:var(--ink-2);font-size:11px;line-height:14px;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.lesson-table .hot-row{background:var(--heat-1-bg)}.lesson-table .unknown-row{color:var(--ink-3)}
+.dialog-rate{min-width:80px}.dialog-rate .rate-track{width:80px;margin-top:4px}
+.mobile-lessons{display:block}
+.mobile-lesson{padding:12px 0;border-bottom:1px solid var(--line);font-size:14px;line-height:20px}
+.mobile-lesson.hot-row{background:var(--heat-1-bg)}
+.mobile-lesson .first{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.mobile-lesson .first b{font-weight:600}.mobile-lesson .numbers{font-variant-numeric:tabular-nums;text-align:right}
+.mobile-lesson .rate-track{margin-top:8px;width:100%}
+.mobile-lesson .breakdown{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;color:var(--ink-2);font-size:12px;line-height:16px}
+.mobile-lesson.unknown-row{color:var(--ink-3)}.desktop-lessons{display:none}
+.sectionhead{margin:24px 0 8px}.sectionhead h3{margin:0;font-size:16px;line-height:22px;font-weight:700}
+.sectionhead p{margin:4px 0 0;color:var(--ink-2);font-size:12px;line-height:16px}
+.dq-kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.dq-kpi{padding:12px}
+.dq-kpi .n{margin-top:8px;font-size:20px;line-height:24px;font-weight:700;font-variant-numeric:tabular-nums}
+.level{display:inline-block;padding:4px 8px;background:var(--surface-2);border-radius:var(--r-tag);color:var(--ink-2);font-size:11px;line-height:14px;font-weight:600}
+.level.error{color:var(--bad)}.level.warning{color:var(--heat-2-fg)}.level.ok{color:var(--green)}
+.tablewrap{max-width:100%;overflow-x:auto}.dq-table{border-collapse:collapse;width:100%;min-width:720px}
+.dq-table td,.dq-table th{padding:12px;border-bottom:1px solid var(--line);font-size:11px;line-height:16px;text-align:left;vertical-align:top}
+.dq-table th{background:var(--surface-2);font-size:11px;line-height:14px;color:var(--ink-2);font-weight:600}
+.dq-title{font-weight:600}.dq-code{display:block;font-size:11px;line-height:14px;color:var(--ink-3)}
+.method{padding:16px;font-size:14px;line-height:20px}.method h3{margin:24px 0 8px;font-size:16px;line-height:22px}.method h3:first-child{margin-top:0}
+.method p{margin:8px 0;color:var(--ink-2)}
+.rules{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}
+.rule{padding:12px;background:var(--surface-2);border-radius:var(--r-ctl);font-size:12px;line-height:16px}
+.select,.tab,.segment button,.signal-row,.close-btn,.info-dot,.retry-btn{transition:background-color 120ms ease,box-shadow 120ms ease,transform 120ms ease}
+@media(min-width:640px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.kpi:last-child{grid-column:auto}.mobile-lessons{display:none}.desktop-lessons{display:block}.dialog-body{max-height:calc(88vh - 100px)}}
+@media(max-width:639px){.tab .full{display:none}.tab .short{display:inline}.rules{grid-template-columns:1fr}.school-summary{gap:4px}.mini{padding:8px}.mini .val{font-size:18px}}
+@media(min-width:1200px){
+.app{padding:0 24px}.topbar{height:64px;padding:0;display:flex;flex-wrap:nowrap;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}.brand h1{width:auto;margin:0;font-size:24px;line-height:30px}
+.statusbox{margin-left:auto;white-space:nowrap}
+.toolbar{position:sticky;top:0;z-index:20;background:var(--bg);display:flex;gap:8px;height:56px;padding:8px 0;align-items:center}
+.search-wrap{grid-column:auto;flex:1;min-width:240px}.input,.select{height:40px;font-size:14px;line-height:20px}
+.segment{width:188px;height:40px;flex:none}.segment button{font-size:14px}.select{width:200px;flex:none}
+.signal-list{display:block;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);overflow:clip;box-shadow:var(--shadow-card);--n:1}
+.signal-cards{display:none}.signal-desktop{display:block}
+.signal-head,.signal-row{display:grid;grid-template-columns:minmax(206px,1fr) 128px 72px 72px 72px 72px 56px calc(var(--n) * 30px - 2px);column-gap:clamp(5px,.65vw,9px);padding-left:16px;padding-right:16px;min-width:0}
+.signal-head{position:sticky;top:56px;z-index:10;height:52px;align-items:end;padding-bottom:8px;background:var(--surface);border-bottom:1px solid var(--line);color:var(--ink-2);font-size:11px;line-height:14px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.signal-head>span:nth-child(n+3):nth-child(-n+7){text-align:right}.signal-head .lessons-head{min-width:0;text-align:left}
+.lesson-head-label{margin-bottom:4px}
+.signal-row{min-height:72px;padding-top:12px;padding-bottom:12px;align-items:center;border:0;border-bottom:1px solid var(--line);border-radius:0;box-shadow:none}
+.signal-row:last-child{border-bottom:0}.signal-row:hover{background:var(--surface-2)}
+.school-head{display:block}.school-head .rate-block{display:none}
+.signal-row .school-title{font-size:14px;line-height:20px}.school-subline{margin-top:4px}.school-subline .leader{font-size:12px}
+.desktop-rate{display:block}.desktop-rate .rate-main{font-size:18px;line-height:24px}.desktop-rate .rate-track{margin-top:4px;width:104px}
+.desktop-count{text-align:right;color:var(--ink-2);font-size:14px;line-height:20px;font-weight:500;font-variant-numeric:tabular-nums}
+.desktop-count.emphasis{color:var(--ink);font-size:16px;font-weight:600}.desktop-count.zero{color:var(--ink-3);font-weight:400}
+.lesson-head-numbers,.lesson-lane{display:grid;grid-template-columns:repeat(var(--n),28px);gap:2px;width:max-content}
+.lesson-head-numbers .lesson-number{line-height:14px}.lesson-lane .heat-cell{width:28px;height:28px;font-size:13px}
+.kpis{grid-template-columns:repeat(5,minmax(0,1fr))}.kpi:last-child{grid-column:auto}.kpi .value{font-size:22px;line-height:28px}
+.dialog{width:min(720px,calc(100vw - 32px));max-height:80vh;margin:auto;border-radius:16px}
+.dialog-handle{display:none}.dialog-body{max-height:calc(80vh - 92px)}
+}
+@media(max-width:1199px){.desktop-rate,.desktop-count{display:none}.lesson-head-numbers{display:none}}
+@media(prefers-reduced-motion:reduce){.dialog,.load-track i,.sk{animation:none}}
+
+
+/* Site 2 v02 — diagnostic usability corrections */
+.info-pop{position:fixed;top:0;left:0;right:auto}
+.info-pop{
+ white-space:normal;overflow-wrap:break-word;word-break:normal;
+ width:min(400px,calc(100vw - 24px));max-width:calc(100vw - 24px);
+ max-height:min(68vh,440px);overflow-y:auto;
+ font-size:12px;line-height:17px;text-align:left;
+}
+.info-pop p{white-space:normal;overflow-wrap:break-word;margin:0 0 12px;line-height:17px}
+.info-pop p:last-child{margin-bottom:0}
+.info-pop[hidden]{display:none}
+.kpi .info-dot{display:inline-grid;vertical-align:middle;margin-left:4px;flex:none}
+.help-pop{position:fixed;z-index:90;width:min(340px,calc(100vw - 24px));padding:12px;
+ background:var(--ink);border-radius:var(--r-ctl);color:var(--surface);
+ font-size:12px;line-height:17px;white-space:normal;overflow-wrap:break-word;
+ max-height:60vh;overflow:auto;box-shadow:0 24px 64px rgba(20,35,30,.24)}
+.help-pop[hidden]{display:none}
+.help-pop b{color:inherit}
+.dq-intro{margin:12px 0 16px;max-width:850px;color:var(--ink-2);font-size:13px;line-height:19px}
+.dq-intro strong{color:var(--ink)}
+.dq-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+.dq-kpi{padding:12px}
+.dq-kpi .dq-kpi-title{font-size:12px;line-height:16px;color:var(--ink-2);font-weight:600}
+.dq-kpi .dq-kpi-desc{margin-top:4px;font-size:11px;line-height:16px;color:var(--ink-2)}
+.dq-kpi .n{font-variant-numeric:tabular-nums}
+.dq-structure{margin:12px 0 20px;padding:12px 16px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card)}
+.dq-audit-pending{margin:12px 0;padding:12px;border:1px solid var(--line-strong);border-radius:var(--r-card);background:var(--surface-2);color:var(--ink-2);font-size:13px;line-height:19px}.dq-audit-pending b{color:var(--ink)}
+.dq-structure summary{font-size:13px;line-height:18px;font-weight:600;cursor:pointer}
+.dq-structure p{margin:12px 0 0;color:var(--ink-2);font-size:12px;line-height:18px}
+.dq-structure .raw-numbers{margin-top:8px;display:flex;gap:8px 24px;flex-wrap:wrap;font-size:13px;line-height:20px}
+.dq-structure .raw-numbers b{color:var(--ink);font-variant-numeric:tabular-nums}
+.dq-quality-head{margin:24px 0 12px}
+.dq-quality-head h3{font-size:16px;line-height:22px;margin:0 0 4px}
+.dq-quality-head p{font-size:12px;line-height:17px;color:var(--ink-2);margin:0}
+.dq-filters{display:block;max-width:420px;margin-bottom:8px}
+.dq-field{display:flex;flex-direction:column;min-width:0;gap:4px}
+.dq-field>span{font-size:11px;line-height:14px;color:var(--ink-2);font-weight:600}
+.dq-field .select,.dq-field .input{height:44px;font-size:16px;line-height:22px;padding:0 10px}
+.dq-levels{display:flex;gap:4px;align-items:center;grid-column:1/-1;overflow-x:auto;min-height:44px;scrollbar-width:thin}
+.dq-levels button{flex:1;min-height:44px;padding:8px 10px;border:1px solid var(--line);border-radius:var(--r-ctl);background:var(--surface);color:var(--ink-2);font-size:12px;line-height:16px;font-weight:600;white-space:nowrap}
+.dq-levels button[aria-pressed='true']{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+.dq-result-count{color:var(--ink-2);font-size:12px;line-height:16px;margin-bottom:12px}
+.dq-cards{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+.dq-card{min-width:0;padding:16px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);box-shadow:var(--shadow-card)}
+.dq-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.dq-card h4{font-size:15px;line-height:20px;font-weight:700;margin:0;overflow-wrap:anywhere}
+.dq-card .level{flex:none}
+.dq-card-school{margin:8px 0;color:var(--ink);font-size:13px;line-height:18px;overflow-wrap:break-word}
+.dq-card-school .leader{font-size:12px;line-height:16px;margin-top:4px}
+.dq-card-values{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}
+.dq-card-value{min-width:0;padding:12px;background:var(--surface-2);border-radius:var(--r-ctl)}
+.dq-card-value .dt{font-size:11px;line-height:15px;color:var(--ink-2);font-weight:500}
+.dq-card-value .dd{margin-top:4px;font-size:16px;line-height:22px;font-weight:650;color:var(--ink);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.dq-card-value .dd.long{font-size:13px;line-height:19px}
+.dq-card-explain{margin:12px 0 0;color:var(--ink-2);font-size:12px;line-height:18px}
+.dq-card-next{margin:8px 0 0;color:var(--ink);font-size:12px;line-height:18px}
+.dq-card-period{margin-top:8px;color:var(--ink-2);font-size:11px;line-height:16px}
+.dq-card details{margin-top:12px;border-top:1px solid var(--line);padding-top:8px;color:var(--ink-2);font-size:11px;line-height:16px}
+.dq-card details summary{cursor:pointer;font-size:12px;line-height:18px}
+.dq-card details p{margin:8px 0 0;overflow-wrap:anywhere}
+.dq-glossary{margin:0 0 16px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);padding:12px 16px}
+.dq-glossary>summary{font-size:13px;line-height:20px;font-weight:600;cursor:pointer}
+.dq-glossary-list{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;margin-top:12px}
+.dq-glossary-item{padding-bottom:12px;border-bottom:1px solid var(--line)}
+.dq-glossary-item:last-child{padding-bottom:0;border:0}
+.dq-glossary-item b{font-size:13px;line-height:18px}
+.dq-glossary-item p{margin:4px 0 0;color:var(--ink-2);font-size:12px;line-height:18px}
+@media(max-width:639px){.dq-levels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));overflow:visible}.dq-levels button{min-width:0;white-space:normal}}
+@media(min-width:640px){.dq-kpis{grid-template-columns:repeat(4,minmax(0,1fr))}.dq-filters{grid-template-columns:repeat(3,minmax(0,1fr))}.dq-levels{grid-column:1/-1}}
+@media(min-width:768px){.dq-cards,.dq-glossary-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(min-width:1200px){.dq-field .select,.dq-field .input{height:40px;font-size:14px;line-height:20px}.dq-levels button{min-height:40px}.dq-filters{grid-template-columns:1fr 1fr 1fr}.dq-cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+
+/* Promotional/sales visual hierarchy; all data and transport code remain untouched. */
+.topbar{padding:16px 0 8px;display:flex;flex-wrap:wrap;align-items:flex-start;gap:8px}
+.brand{display:flex;flex-direction:column;align-items:flex-start;gap:0;min-width:0;width:100%}
+.brand-line{display:flex;flex-wrap:wrap;align-items:center;gap:12px;min-width:0}
+.brand h1{margin:0;width:auto;font-size:18px;line-height:24px;font-weight:700;letter-spacing:-.01em}
+.page-subtitle{margin:4px 0 0;color:var(--ink-2);font-size:13px;line-height:18px;font-weight:400}
+.header-chip{margin-top:8px}
+.statusbox{margin-top:8px}
+.school-head{display:block}
+.school-subline{margin-top:4px}
+.top-badge{margin-left:8px;margin-right:8px;max-width:max-content}
+.card-main-stats{display:flex;align-items:flex-start;gap:24px;margin-top:12px;min-width:0}
+.card-main-item{min-width:0;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start}
+.card-main-item .rate-main{font-size:20px;line-height:24px;font-weight:700;color:var(--ink)}
+.card-main-item.low .rate-main{color:var(--ink-2)}
+.card-main-item .rate-label{color:var(--ink-2);font-size:11px;line-height:14px;font-weight:500;white-space:normal}
+.card-rate-track{margin-top:8px}
+.lesson-grid{width:min(100%,calc(var(--n) * 42px - 2px));grid-template-columns:repeat(var(--n),minmax(0,1fr))}
+.school-summary .mini .val{font-size:22px;line-height:28px;font-weight:700;color:var(--ink)}
+.school-summary .mini.responses .val{color:var(--ink-2)}
+@media(max-width:639px){.lesson-grid{width:min(100%,calc(var(--n) * 34px - 2px))}.school-summary .mini .val{font-size:22px;line-height:28px}}
+@media(min-width:1200px){
+  .topbar{height:auto;min-height:72px;padding:16px 0 8px;flex-wrap:nowrap;justify-content:space-between;align-items:flex-start}
+  .brand{width:auto;display:flex;flex-direction:column;align-items:flex-start;gap:0}
+  .brand-line{flex-wrap:nowrap;gap:12px}
+  .brand h1{font-size:24px;line-height:30px;white-space:nowrap}
+  .header-chip{margin-top:0}
+  .statusbox{margin:0;min-height:30px;align-items:center;flex:none}
+  .select{width:220px}
+  .signal-list{--lane-cell:28px;--lane-gap:2px;--pad-l:24px;--pad-r:16px}
+  .signal-list[style*="--n: 10"],.signal-list[style*="--n: 11"],.signal-list[style*="--n: 12"]{--lane-cell:24px}
+  .signal-head,.signal-row{
+    grid-template-columns:minmax(192px,1fr) 128px 76px 76px calc(76px + 24px) 76px 56px calc(var(--n)*(var(--lane-cell) + var(--lane-gap)) - var(--lane-gap) + var(--pad-l) + var(--pad-r));
+    column-gap:10px;padding-left:16px;padding-right:0;
+  }
+  .signal-head{position:relative;top:auto;z-index:10;height:52px;align-items:end;padding-bottom:8px;background:var(--surface);border-bottom:1px solid var(--line)}
+  .signal-head > :nth-child(5),.signal-row > :nth-child(5){padding-left:24px;border-left:1px solid var(--line)}
+  .signal-row > :nth-child(5){align-self:stretch;margin-block:-12px;padding-block:12px;display:flex;align-items:center;justify-content:flex-end}
+  .signal-head > :nth-child(5){align-self:stretch;display:flex;align-items:flex-end;justify-content:flex-end;margin-bottom:-8px;padding-bottom:8px}
+  .signal-row > .desktop-count:nth-child(7){color:var(--ink-3);font-weight:400}
+  .signal-head > .lessons-head,.signal-row > .lesson-lane{
+    align-self:stretch;padding-left:var(--pad-l);padding-right:var(--pad-r);border-left:1px solid var(--line-strong);background:var(--surface-2);
+  }
+  .signal-row > .lesson-lane{margin-block:-12px;padding-block:12px;display:flex;align-items:center;gap:var(--lane-gap);width:auto}
+  .signal-head > .lessons-head{display:flex;flex-direction:column;justify-content:flex-end;padding-bottom:8px;margin-bottom:-8px}
+  .lesson-head-numbers{grid-template-columns:repeat(var(--n),var(--lane-cell));gap:var(--lane-gap);width:max-content}
+  .lesson-lane .heat-cell{flex:0 0 var(--lane-cell);width:var(--lane-cell);height:var(--lane-cell)}
+  .signal-row:hover > .lesson-lane{background:#eaeee6}
+  .signal-row:hover{background:#fbfcf8}
+  .signal-row .top-badge{margin-right:8px}
+  .desktop-count.emphasis{color:var(--ink);font-size:18px;line-height:24px;font-weight:700}
+  .desktop-count.emphasis.zero{color:var(--ink-3);font-weight:400}
+  .lesson-head-label{margin-bottom:4px}
+}
+
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-line"><h1>Продвижение и продажи на занятиях</h1>
+      <span class="header-chip" id="flowChip">Загружаем период…</span></div>
+      <p class="page-subtitle">По ответам участников анкеты</p>
+    </div>
+    <div class="statusbox" id="updated" aria-live="polite">
+      <div class="status-title"><span class="status-dot"></span>Загружаем актуальные данные</div>
+      <div class="load-track"><i></i></div>
+    </div>
+  </header>
+  <nav class="tabs" aria-label="Разделы">
+    <button class="tab active" data-view="signals"><span class="full">Продвижение и продажи</span><span class="short">Продвижение</span></button>
+    <button class="tab" data-view="quality"><span class="full">Контроль данных</span><span class="short">Контроль</span></button>
+    <button class="tab" data-view="method"><span class="full">Методика</span><span class="short">Методика</span></button>
+  </nav>
+
+  
+<main>
+    <section class="view active" id="view-signals">
+      <div class="hero"><h2>Продвижение и продажи на занятиях по школам</h2><p>Сначала загружаются свежие данные. Таблица появится здесь автоматически.</p></div>
+      <div class="card skeleton" aria-hidden="true">
+        <div class="sk-row"><i class="sk"></i><i class="sk tiny"></i><i class="sk tiny"></i><i class="sk"></i></div>
+        <div class="sk-row"><i class="sk"></i><i class="sk tiny"></i><i class="sk tiny"></i><i class="sk short"></i></div>
+        <div class="sk-row"><i class="sk short"></i><i class="sk tiny"></i><i class="sk tiny"></i><i class="sk"></i></div>
+        <div class="sk-row"><i class="sk"></i><i class="sk tiny"></i><i class="sk tiny"></i><i class="sk short"></i></div>
+      </div>
+    </section>
+    <section class="view" id="view-quality"></section>
+    <section class="view" id="view-method"></section>
+  </main>
+
+  <div class="footer">TERRA · сайт №2 · продвижение и продажи · показатели не меняют рейтинг школ</div>
+</div>
+
+<dialog class="dialog" id="schoolDialog"></dialog>
+<div class="help-pop" id="helpPopover" role="status" hidden></div>
+
+<script>
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function dateRu(s){if(!s)return'—';const [y,m,d]=String(s).slice(0,10).split('-');return `${d}.${m}.${y}`}
+function shortStamp(iso){if(!iso)return'—';const p=String(iso).split('T');if(p.length<2)return String(iso);const ymd=p[0].split('-');return `${ymd[2]}.${ymd[1]}.${ymd[0]} ${p[1].slice(0,5)}`}
+function pct100(v,d=1){return v==null?'—':Number(v).toFixed(d).replace('.',',')+'%'}
+function nfmt(v){return new Intl.NumberFormat('ru-RU').format(Number(v||0))}
+function apiUrl(base,flow,view){const sep=base.includes('?')?'&':'?';return `${base}${sep}flow=${encodeURIComponent(flow)}&view=${encodeURIComponent(view)}`}
+function plural(n,one,few,many){n=Math.abs(Number(n));const n10=n%10,n100=n%100;return n10===1&&n100!==11?one:n10>=2&&n10<=4&&(n100<12||n100>14)?few:many}
+
+const API_VIEW='signals';
+const DEFAULT_API_BASE='https://script.google.com/macros/s/AKfycbxMVZQ3K7VbshTnz0OOuRX6Tflpp9RthUPmu69_68bJtyguxUZkiU7pZw0SbVD8P0Tp9Q/exec';
+const qs=new URLSearchParams(location.search);
+const API_BASE=window.TERRA_API_URL||qs.get('api')||DEFAULT_API_BASE;
+const FLOW=Number(qs.get('flow')||40);
+const state={data:null,tab:'signals',signalMin:1,signalSort:'rate',search:'',dqCode:'all'};
+
+function closeHelpPopover(){const p=document.getElementById('helpPopover');if(p)p.hidden=true;document.querySelectorAll('.info-dot[aria-expanded="true"][data-tip]').forEach(b=>b.setAttribute('aria-expanded','false'))}
+function bindTips(root=document){
+ root.querySelectorAll('.info-dot[data-tip],.info-btn[data-tip]').forEach(btn=>{
+  if(btn.dataset.bound)return;
+  btn.dataset.bound='1';btn.setAttribute('aria-expanded','false');
+  btn.addEventListener('click',e=>{
+   e.preventDefault();e.stopPropagation();
+   const pop=document.getElementById('helpPopover'),was=!pop.hidden&&pop.dataset.owner===btn.dataset.helpId;
+   closeHelpPopover();if(was)return;
+   if(!btn.dataset.helpId)btn.dataset.helpId='help-'+(++helpSequence);
+   pop.dataset.owner=btn.dataset.helpId;pop.textContent=btn.dataset.tip||'';pop.hidden=false;
+   const rect=btn.getBoundingClientRect(),w=pop.offsetWidth,h=pop.offsetHeight;
+   pop.style.left=Math.max(12,Math.min(window.innerWidth-w-12,rect.right-w))+'px';
+   pop.style.top=(rect.bottom+8+h>window.innerHeight&&rect.top>h+16?rect.top-h-8:rect.bottom+8)+'px';
+   btn.setAttribute('aria-expanded','true');
+  });
+ });
+}
+let helpSequence=0;
+document.addEventListener('click',e=>{const pop=document.getElementById('helpPopover');if(pop&&!pop.hidden&&!pop.contains(e.target))closeHelpPopover()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeHelpPopover()});
+
+function statusInfoMarkup(d){
+ const last=shortStamp(d.meta?.sourceLastResponseAt),rows=nfmt(d.meta?.sourceRows);
+ return `<button type="button" class="info-dot" id="statusInfoBtn" aria-label="О данных" aria-expanded="false">i</button><div class="info-pop" id="statusInfoPop" hidden><p>Рабочий доступ по ссылке. Авторизации нет. На странице нет текстовых комментариев и персональных ответов, только агрегированные показатели.</p><p>Отметка — анкета, где участник указал, что на занятии просили подписаться на соцсети, рекламировали себя или предлагали что-то купить. Одна анкета считается одной отметкой, даже если отмечены оба пункта. Это ответы участников, а не установленный факт нарушения.</p><p>Рабочая панель руководителей кластеров и администрации. Последний ответ ${last} МСК · ${rows} строк.</p></div>`;
+}
+function liveStatus(d){return `<div class="status-title"><span class="status-dot"></span>Обновлено ${shortStamp(d.meta?.generatedAt)} МСК</div>${statusInfoMarkup(d)}`}
+function bindStatusInfo(){
+ const btn=document.getElementById('statusInfoBtn'),pop=document.getElementById('statusInfoPop');if(!btn||!pop)return;
+ btn.onclick=e=>{e.stopPropagation();pop.hidden=!pop.hidden;btn.setAttribute('aria-expanded',String(!pop.hidden));if(!pop.hidden){const rect=btn.getBoundingClientRect(),w=pop.offsetWidth,h=pop.offsetHeight;pop.style.left=Math.max(12,Math.min(window.innerWidth-w-12,rect.right-w))+'px';pop.style.top=(rect.bottom+8+h>window.innerHeight&&rect.top>h+16?rect.top-h-8:rect.bottom+8)+'px'}};
+ if(!document.body.dataset.infoBound){document.body.dataset.infoBound='1';document.addEventListener('click',e=>{const p=document.getElementById('statusInfoPop'),b=document.getElementById('statusInfoBtn');if(p&&!p.hidden&&!p.contains(e.target)&&!b.contains(e.target)){p.hidden=true;b.setAttribute('aria-expanded','false')}});document.addEventListener('keydown',e=>{if(e.key==='Escape'){const p=document.getElementById('statusInfoPop'),b=document.getElementById('statusInfoBtn');if(p&&!p.hidden){p.hidden=true;b?.setAttribute('aria-expanded','false')}}})}
+}
+function setLoading(attempt,total){
+ const box=document.getElementById('updated');box.classList.remove('error');
+ box.innerHTML=`<div class="status-title"><span class="status-dot"></span>${attempt<=1?'Загружаем актуальные данные':`Повторное подключение · попытка ${attempt} из ${total}`}</div><div class="load-track"><i></i></div>`;
+}
+function wait(ms){return new Promise(resolve=>setTimeout(resolve,ms))}
+function loadJsonpOnce(url,timeoutMs,attempt){return new Promise((resolve,reject)=>{const callback='__terra_signals_'+Date.now()+'_'+attempt+'_'+Math.random().toString(36).slice(2);const script=document.createElement('script');let done=false;const timer=setTimeout(()=>finish(new Error('JSONP timeout')),timeoutMs);function finish(err,data){if(done)return;done=true;clearTimeout(timer);script.remove();if(err){window[callback]=function(){};setTimeout(()=>{try{delete window[callback]}catch(_){}},60000);reject(err)}else{try{delete window[callback]}catch(_){}resolve(data)}}window[callback]=data=>finish(null,data);script.onerror=()=>finish(new Error('JSONP network error'));script.async=true;script.referrerPolicy='no-referrer';const sep=url.includes('?')?'&':'?';const bucket=Math.floor(Date.now()/300000);script.src=url+sep+'callback='+encodeURIComponent(callback)+'&v='+bucket+'&attempt='+attempt;document.head.appendChild(script)})}
+// Test connection: v02 Firebase pilot. No secret, SDK or external JS dependency.
+const TERRA_FIREBASE_DB='https://terra-dashboards-default-rtdb.europe-west1.firebasedatabase.app';
+const TERRA_FIREBASE_PUBLIC_PATH='/published/flow40/signals.json';
+const FIREBASE_TIMEOUTS=[12000,18000];
+function validateFirebasePayload(d){
+ if(!d||typeof d!=='object'||Array.isArray(d)||d.schemaVersion!=='1.5'||d.view!=='signals'||Number(d.flow?.id)!==40||!d.meta?.generatedAt||!Array.isArray(d.participantSignals?.cup?.allSchools))
+  throw new Error('Firebase вернул пустые или несовместимые данные');
+ return d;
+}
+async function fetchFirebaseOnce(timeoutMs){
+ const controller=new AbortController();
+ const timer=setTimeout(()=>controller.abort(),timeoutMs);
+ try{
+  const response=await fetch(TERRA_FIREBASE_DB+TERRA_FIREBASE_PUBLIC_PATH,{method:'GET',mode:'cors',credentials:'omit',cache:'no-store',headers:{Accept:'application/json'},signal:controller.signal});
+  if(!response.ok)throw new Error('Firebase: HTTP '+response.status);
+  return validateFirebasePayload(await response.json());
+ }finally{clearTimeout(timer)}
+}
+async function loadLiveData(){
+ if(FLOW!==40)throw new Error('Тестовая Firebase-версия поддерживает только поток 40');
+ let lastError=null;
+ for(let i=0;i<FIREBASE_TIMEOUTS.length;i++){
+  setLoading(i+1,FIREBASE_TIMEOUTS.length);
+  try{return await fetchFirebaseOnce(FIREBASE_TIMEOUTS[i])}
+  catch(err){lastError=err;console.warn('Firebase request failed, attempt '+(i+1)+':',err.message);if(i+1<FIREBASE_TIMEOUTS.length)await wait(800)}
+ }
+ throw lastError||new Error('Не удалось получить данные из Firebase');
+}
+function showLoadError(e){console.error(e);const box=document.getElementById('updated');box.classList.add('error');box.innerHTML='<div class="status-title"><span class="status-dot"></span>Не удалось подключиться к данным</div><div>Firebase не ответил после двух попыток.</div>';document.getElementById('view-signals').innerHTML='<div class="errorbox"><b>Не удалось прочитать данные Firebase.</b><br>Старый снимок не показывается. Можно сразу повторить подключение.<br><button class="retry-btn" onclick="location.reload()">Повторить загрузку</button></div>'}
+
+function signalTip(){return 'Анкет с отметкой — число анкет, где участники указали просьбу подписаться на соцсети, рекламу или продажи. Одна анкета учитывается один раз, даже если отмечены оба пункта. Доля всех ответов = количество анкет с отметкой, разделённое на количество всех ответов, умноженное на 100.'}
+const MIN_RESPONSES_FOR_SHARE = 20;
+function percentLabel(v){
+ if(v==null||!Number.isFinite(Number(v)))return '—';
+ const x=Number(v);if(x>0&&x<0.1)return '<0,1%';
+ return x.toLocaleString('ru-RU',{minimumFractionDigits:1,maximumFractionDigits:1})+'%';
+}
+function heatClass(p,responses,present=true){
+ if(!present||!(Number(responses)>0))return 'unknown';
+ if(!(Number(p)>0))return 'zero';
+ const v=Number(p);return 'heat'+Math.min(v>=5?3:v>=2?2:1,Number(responses)<10?1:3);
+}
+function sortedLessons(r){return Array.isArray(r.lessonBreakdown)?r.lessonBreakdown:[]}
+function lessonsN(){
+ let max=1;
+ for(const r of(state.data?.participantSignals?.cup?.allSchools||[]))
+  for(const x of sortedLessons(r)){const k=Number(x.lesson);if(Number.isInteger(k)&&k>0)max=Math.max(max,k)}
+ return Math.min(12,max);
+}
+function getLesson(r,id){
+ const x=sortedLessons(r).find(x=>Number(x.lesson)===id);
+ return x&&Number(x.responses)>0?x:null;
+}
+function heatCell(x,id){
+ const count=Number(x?.flaggedResponses||0),p=Number(x?.flaggedRatePct||0),cl=heatClass(p,Number(x?.responses||0),!!x);
+ const label=x?`Занятие ${id}: ${count} ${plural(count,'отметка','отметки','отметок')} из ${nfmt(x.responses)} ${plural(x.responses,'ответа','ответов','ответов')} (${percentLabel(p)})`:`Занятие ${id}: нет данных по занятию`;
+ return `<span class="heat-cell ${cl}" title="${esc(label)}" aria-label="${esc(label)}">${x&&count>0?nfmt(count):''}</span>`;
+}
+function lessonNums(n){return Array.from({length:n},(_,i)=>`<span class="lesson-number">${i+1}</span>`).join('')}
+function lessonValues(r,n){return Array.from({length:n},(_,i)=>heatCell(getLesson(r,i+1),i+1)).join('')}
+function rateBar(r,extra=''){
+ const p=Number(r.flaggedRatePct||0),lvl=heatClass(p,Number(r.responses)||0,true);
+ const low=Number(r.responses||0)<MIN_RESPONSES_FOR_SHARE;
+ const fillClass=low?'low':lvl==='heat2'?'heat2':lvl==='heat3'?'heat3':'';
+ return `<div class="rate-track ${extra}" aria-hidden="true"><div class="rate-fill ${fillClass}" style="width:${Math.max(0,Math.min(100,p*10))}%"></div></div>`;
+}
+function titleMarkup(r){return `<div class="school-title">№${esc(r.schoolId)} · ${esc(r.displayName||'—')}</div>`}
+function subMarkup(r){return `<div class="school-subline"><span class="leader">${esc(r.leaderName||'')}</span>${r.isTop?'<span class="top-badge">ТОП-10</span>':''}</div>`}
+function rateMarkup(r,card=false){
+ const low=Number(r.responses||0)<MIN_RESPONSES_FOR_SHARE;
+ return `<div class="${card?'rate-block':'desktop-rate'} ${low?'low':''}"><div class="rate-main">${percentLabel(r.flaggedRatePct)}</div>${card?'<span class="rate-label">доля</span>':rateBar(r)}</div>`;
+}
+function countMarkup(v,emph=false){
+ const n=Number(v||0);
+ return `<div class="desktop-count ${emph?'emphasis':''} ${n===0?'zero':''}">${nfmt(n)}</div>`;
+}
+function cardRow(r,n){
+ const pills=[['Соцсети',r.socialSubscriptions],['Продажи',r.salesAdvertising],['Оба',r.bothFlags]].filter(([,v])=>Number(v)>0);
+ return `<div class="signal-row" role="button" tabindex="0" data-school="${esc(r.schoolId)}" aria-label="Открыть данные школы №${esc(r.schoolId)}"><div class="school-head"><div class="title-wrap">${titleMarkup(r)}</div></div>${subMarkup(r)}<div class="card-main-stats"><div class="card-main-item ${Number(r.responses||0)<MIN_RESPONSES_FOR_SHARE?'low':''}"><div class="rate-main">${percentLabel(r.flaggedRatePct)}</div><span class="rate-label">доля</span></div><div class="card-main-item"><div class="rate-main">${nfmt(r.flaggedResponses)}</div><span class="rate-label">отметок из ${nfmt(r.responses)} ${plural(r.responses,'ответа','ответов','ответов')}</span></div></div>${rateBar(r,'card-rate-track')}${pills.length?`<div class="pills">${pills.map(([key,v])=>`<span class="pill">${key} <b>${nfmt(v)}</b></span>`).join('')}</div>`:''}<div class="card-lessons"><div class="lesson-label">По занятиям</div><div class="lesson-grid" style="--n:${n}">${lessonNums(n)}${lessonValues(r,n)}</div></div></div>`;
+}
+function desktopRow(r,n){
+ return `<div class="signal-row" role="button" tabindex="0" data-school="${esc(r.schoolId)}" aria-label="Открыть данные школы №${esc(r.schoolId)}"><div>${titleMarkup(r)}${subMarkup(r)}</div>${rateMarkup(r)}${countMarkup(r.flaggedResponses,true)}${countMarkup(r.responses)}${countMarkup(r.socialSubscriptions)}${countMarkup(r.salesAdvertising)}${countMarkup(r.bothFlags)}<div class="lesson-lane" style="--n:${n}">${lessonValues(r,n)}</div></div>`;
+}
+function getSignalRows(){
+ const ps=state.data.participantSignals?.cup;
+ let rows=(ps?.allSchools||[]).slice();const q=state.search.trim().toLowerCase();
+ rows=rows.filter(r=>Number(r.flaggedResponses)>=state.signalMin)
+  .filter(r=>!q||String(r.schoolId).includes(q)||String(r.displayName||'').toLowerCase().includes(q)||String(r.leaderName||'').toLowerCase().includes(q));
+ if(state.signalSort==='rate')rows.sort((a,b)=>(Number(a.responses)<MIN_RESPONSES_FOR_SHARE)-(Number(b.responses)<MIN_RESPONSES_FOR_SHARE)||Number(b.flaggedRatePct)-Number(a.flaggedRatePct)||Number(b.flaggedResponses)-Number(a.flaggedResponses)||Number(b.responses)-Number(a.responses)||Number(a.schoolId)-Number(b.schoolId));
+ else rows.sort((a,b)=>Number(b.flaggedResponses)-Number(a.flaggedResponses)||Number(b.flaggedRatePct)-Number(a.flaggedRatePct)||Number(a.schoolId)-Number(b.schoolId));
+ return rows;
+}
+function renderListContent(rows,n,desktop=false){
+ const maker=desktop?desktopRow:cardRow;
+ if(state.signalSort==='rate'){
+  const good=rows.filter(r=>Number(r.responses)>=MIN_RESPONSES_FOR_SHARE);
+  const low=rows.filter(r=>Number(r.responses)<MIN_RESPONSES_FOR_SHARE);
+  return good.map(r=>maker(r,n)).join('')+(low.length?`<div class="signal-divider">Меньше ${MIN_RESPONSES_FOR_SHARE} ответов — доля ненадёжна</div>`+low.map(r=>maker(r,n)).join(''):'');
+ }
+ return rows.map(r=>maker(r,n)).join('');
+}
+function renderSignalList(){
+ const target=document.getElementById('signalList');if(!target)return;
+ const rows=getSignalRows(),n=lessonsN();target.style.setProperty('--n',n);
+ if(!rows.length){target.innerHTML='<div class="empty">Ничего не найдено. Измените запрос или фильтр.</div>';return}
+ target.innerHTML=`<div class="signal-head"><span>Школа</span><span title="Доля анкет с отметкой от всех ответов">Доля</span><span title="Анкет, где отмечена просьба подписаться, реклама или продажи">Отметок</span><span>Ответов</span><span title="Просили подписаться на соцсети">Соцсети</span><span title="Реклама или продажи на занятии">Продажи</span><span title="Отмечены оба пункта">Оба</span><div class="lessons-head"><div class="lesson-head-label">По занятиям</div><div class="lesson-head-numbers" style="--n:${n}">${lessonNums(n)}</div></div></div><div class="signal-cards">${renderListContent(rows,n,false)}</div><div class="signal-desktop">${renderListContent(rows,n,true)}</div>`;
+ target.querySelectorAll('.signal-row').forEach(el=>{const act=()=>openSchool(Number(el.dataset.school));el.addEventListener('click',act);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();act()}})});
+}
+
+function kpi(label,value,sub,help=''){return `<div class="card kpi"><div class="label">${label}${help?` <button class="info-dot" type="button" data-tip="${esc(help)}">i</button>`:''}</div><div class="value">${value}</div><div class="sub">${sub||''}</div></div>`}
+function renderSignals(){
+ const d=state.data,ps=d.participantSignals?.cup||{summary:{},allSchools:[]},s=ps.summary||{},el=document.getElementById('view-signals');
+ const icon=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16 16 5 5"/></svg>`;
+ const overallPct=Number(s.responses)>0?100*Number(s.flaggedResponses||0)/Number(s.responses):0;
+ el.innerHTML=`<h2 class="visually-hidden">Продвижение и продажи на занятиях по школам</h2><div class="toolbar"><label class="search-wrap">${icon}<input type="search" autocomplete="off" enterkeyhint="search" aria-label="Поиск по школе и руководителю" class="input" id="signalSearch" placeholder="Школа, руководитель или №"></label><div class="segment" role="group" aria-label="Сортировка"><button type="button" data-sort="rate" aria-pressed="${state.signalSort==='rate'}">По доле</button><button type="button" data-sort="count" aria-pressed="${state.signalSort==='count'}">По числу</button></div><select class="select" id="signalMin" aria-label="Минимальное число отметок"><option value="1">Все школы с отметками</option><option value="2">2+ отметки</option><option value="3">3+ отметки</option><option value="5">5+ отметок</option><option value="10">10+ отметок</option></select></div><div class="legend"><div class="legend-note">ТОП-10 — школа входила в десятку лидеров прошлого потока.</div><div class="legend-items"><span class="legend-item"><i class="legend-square zero"></i> нет отметок</span><span class="legend-item"><i class="legend-square heat1"></i> до 2%</span><span class="legend-item"><i class="legend-square heat2"></i> 2–5%</span><span class="legend-item"><i class="legend-square heat3"></i> 5% и выше</span><span class="legend-item"><i class="legend-square unknown"></i> нет данных по занятию</span></div></div><div class="signal-list" id="signalList"></div><div class="summary-head"><h3>Сводка по потоку</h3></div><div class="kpis">${kpi('Анкет с отметкой',nfmt(s.flaggedResponses),`${percentLabel(overallPct)} всех ответов`,signalTip())}${kpi('Школ с отметками',nfmt(s.flaggedSchools||ps.allSchools.length),'хотя бы 1 отметка')}${kpi('Просили подписаться',nfmt(s.socialSubscriptions),'отмечена просьба подписаться')}${kpi('Реклама и продажи',nfmt(s.salesAdvertising),'отмечена реклама или продажа')}${kpi('Оба пункта',nfmt(s.bothFlags),'соцсети и реклама в одной анкете')}</div>`;
+ const search=el.querySelector('#signalSearch'),min=el.querySelector('#signalMin');
+ search.value=state.search;min.value=String(state.signalMin);
+ search.oninput=e=>{state.search=e.target.value;renderSignalList()};
+ min.onchange=e=>{state.signalMin=Number(e.target.value);renderSignalList()};
+ el.querySelectorAll('[data-sort]').forEach(b=>b.onclick=()=>{state.signalSort=b.dataset.sort;el.querySelectorAll('[data-sort]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));renderSignalList()});
+ renderSignalList();bindTips(el);
+}
+function modalLine(r,id,focus){
+ const x=getLesson(r,id);
+ if(!x)return `<div class="mobile-lesson unknown-row"><div class="first"><b>Занятие ${id}</b><span>нет данных по занятию</span></div></div>`;
+ const cnt=Number(x.flaggedResponses||0),p=Number(x.flaggedRatePct||0);
+ const extra=[['Соцсети',x.socialSubscriptions],['Продажи',x.salesAdvertising],['Оба',x.bothFlags]].filter(([,v])=>Number(v)>0);
+ return `<div class="mobile-lesson ${id===focus?'hot-row':''}"><div class="first"><b>Занятие ${id}</b><span class="numbers">${nfmt(cnt)} из ${nfmt(x.responses)} · ${percentLabel(p)}</span></div>${rateBar(x)}${extra.length?`<div class="breakdown">${extra.map(([a,b])=>`${a} ${nfmt(b)}`).join(' · ')}</div>`:''}</div>`;
+}
+function modalRow(r,id,focus){
+ const x=getLesson(r,id);
+ if(!x)return `<tr class="unknown-row"><td>Занятие ${id}</td><td colspan="6">Нет данных по занятию</td></tr>`;
+ const cnt=Number(x.flaggedResponses||0),values=[x.socialSubscriptions,x.salesAdvertising,x.bothFlags];
+ return `<tr class="${id===focus?'hot-row':''}"><td>Занятие ${id}</td><td>${nfmt(x.responses)}</td><td><b>${nfmt(cnt)}</b></td><td><div class="dialog-rate">${percentLabel(x.flaggedRatePct)}${rateBar(x)}</div></td>${values.map(v=>`<td>${nfmt(v)}</td>`).join('')}</tr>`;
+}
+function openSchool(id){
+ const r=(state.data.participantSignals?.cup?.allSchools||[]).find(x=>Number(x.schoolId)===Number(id));if(!r)return;
+ const n=lessonsN(),items=sortedLessons(r).filter(x=>Number(x.responses)>=10&&Number(x.flaggedResponses)>0&&Number.isInteger(Number(x.lesson))&&Number(x.lesson)>0&&Number(x.lesson)<=n).sort((a,b)=>Number(b.flaggedResponses)-Number(a.flaggedResponses)||Number(b.flaggedRatePct)-Number(a.flaggedRatePct));
+ const focus=items[0],focusIndex=focus?Number(focus.lesson):-1;
+ const focusText=focus?`<div class="focus-note">Больше всего отметок на занятии <b>${focus.lesson}</b>: <b>${nfmt(focus.flaggedResponses)} из ${nfmt(focus.responses)}</b> ${plural(focus.responses,'ответа','ответов','ответов')} (${percentLabel(focus.flaggedRatePct)}).</div>`:'';
+ const dialog=document.getElementById('schoolDialog');
+ dialog.innerHTML=`<div class="dialog-handle"></div><div class="dialog-head"><div><h3>№${esc(r.schoolId)} · ${esc(r.displayName)}</h3><p>${esc(r.leaderName||'')} · разбивка по занятиям</p></div><button type="button" class="close-btn" aria-label="Закрыть">×</button></div><div class="dialog-body"><div class="school-summary"><div class="mini"><div class="lab">Доля</div><div class="val">${percentLabel(r.flaggedRatePct)}</div></div><div class="mini"><div class="lab">Отметок</div><div class="val">${nfmt(r.flaggedResponses)}</div></div><div class="mini responses"><div class="lab">Ответов</div><div class="val">${nfmt(r.responses)}</div></div></div>${focusText}<div class="desktop-lessons"><table class="lesson-table"><thead><tr><th>Занятие</th><th>Ответов</th><th>Отметок</th><th>Доля</th><th>Соцсети</th><th>Продажи</th><th>Оба</th></tr></thead><tbody>${Array.from({length:n},(_,i)=>modalRow(r,i+1,focusIndex)).join('')}</tbody></table></div><div class="mobile-lessons">${Array.from({length:n},(_,i)=>modalLine(r,i+1,focusIndex)).join('')}</div></div>`;
+ dialog.querySelector('.close-btn').onclick=()=>dialog.close();
+ if(!dialog.dataset.wired){dialog.dataset.wired='1';dialog.addEventListener('click',e=>{if(e.target!==dialog)return;const b=dialog.getBoundingClientRect();if(e.clientX<b.left||e.clientX>b.right||e.clientY<b.top||e.clientY>b.bottom)dialog.close()});dialog.addEventListener('close',()=>document.body.classList.remove('modal-open'))}
+ document.body.classList.add('modal-open');dialog.showModal();
+}
+
+const categoryNames={structure:'Структура данных',calendar:'Календарь',activity:'Активность ответов',scores:'Оценочные паттерны',duplicates:'Повторы',format:'Формат занятий',competition:'Плотность рейтинга'};
+const diagnosticTypes={
+ TIMEZONE_MISMATCH:{name:'Несовпадение часового пояса',found:'Часовые пояса таблицы / скрипта',baseline:'Ожидаемый часовой пояс',explain:'В таблице и скрипте часовые пояса не совпадают с московским. Это может влиять на распределение анкет по неделям.',action:'Проверить часовой пояс Google Sheets и проекта Apps Script.',format:'text'},
+ SCHOOL_LABEL_VARIANTS:{name:'Разные названия одной школы',found:'Вариантов названия',baseline:'Обычное число вариантов',explain:'Для одного номера школы встречается несколько текстовых названий.',action:'Сверить названия школы в форме и исходных ответах.',format:'variants'},
+ SCHOOL_NAME_FALLBACK:{name:'Название школы разобрано упрощённо',found:'Исходная запись школы',baseline:'Эталон не задан',explain:'Номер школы удалось получить, но название или руководитель разобраны резервным способом.',action:'Проверить корректность названия и руководителя в справочнике школ.',format:'text'},
+ FIRST_WEEK_LOW_VOLUME:{name:'Мало ответов на первой неделе',found:'Анкет на первой неделе',baseline:'Контрольный минимум анкет',explain:'За первую неделю потока получено меньше анкет, чем установленный контрольный минимум.',action:'Уточнить дату начала занятий и сбор обратной связи.',format:'count'},
+ START_GAP:{name:'Длинная пауза после первой анкеты',found:'Перерыв между первыми анкетами',baseline:'Контрольный срок',explain:'После самой первой анкеты потока следующая поступила с необычно большой задержкой.',action:'Проверить начало сбора анкет и даты первых занятий.',format:'days1'},
+ NEW_SCHOOL_ID:{name:'Школа появилась после второй недели',found:'Первые ответы школы',baseline:'Старт потока',explain:'Первые анкеты школы появились на третьей неделе потока или позднее. Появление на второй неделе считается нормальным и не включается в проверки.',action:'Уточнить, с какого занятия школа начала участвовать в потоке.',format:'week'},
+ BURST_RESPONSES:{name:'Необычный всплеск ответов',found:'Максимум анкет за 10 минут',baseline:'Медианный максимум прошлых недель',explain:'Скрипт сравнивает наибольшее число анкет за любой 10-минутный интервал с медианой таких максимумов прошлых недель школы. Также действует абсолютный порог.',action:'Проверить, собирались ли анкеты сразу после занятия или массово в один момент.',format:'count'},
+ WEEKLY_VOLUME_GROWTH:{name:'Резкий рост числа ответов',found:'Анкет за эту неделю',baseline:'Анкет за прошлую неделю',explain:'Число анкет за неделю как минимум удвоилось по сравнению с предыдущей неделей при достаточном количестве ответов.',action:'Сравнить посещаемость и способы сбора анкет на соседних неделях.',format:'count'},
+ NO_RECENT_RESPONSES:{name:'Давно нет новых анкет',found:'Дней после последней анкеты',baseline:'Контрольный срок',explain:'С момента последней анкеты этой школы прошло больше установленного числа дней. Номер недели не указывается: проверка относится к текущему периоду без ответов.',action:'Проверить, идут ли занятия и продолжается ли сбор обратной связи.',format:'days'},
+ SCORE_JUMP:{name:'Резкое изменение среднего балла',found:'Средний балл этой недели',baseline:'Средний балл прошлой недели',explain:'Средний балл по пяти рейтинговым вопросам заметно изменился относительно предыдущей недели.',action:'Посмотреть, изменились ли содержание или условия занятий.',format:'score'},
+ PERFECT_SHARE_JUMP:{name:'Резкое изменение доли максимальных анкет',found:'Максимальных анкет сейчас',baseline:'Максимальных анкет раньше',explain:'Доля анкет со всеми максимальными рейтинговыми оценками заметно изменилась в процентных пунктах.',action:'Сравнить состав и объём ответов двух недель.',format:'percentage'},
+ PERFECT_100_PERCENT:{name:'Все анкеты с максимальными оценками',found:'Анкет с максимальными оценками',baseline:'Сравнительного значения нет',explain:'Во всех учтённых анкетах недели стоят максимальные оценки по рейтинговым вопросам при достаточно большой выборке.',action:'Уточнить объём ответов и формат проведения занятия.',format:'percentage'},
+ LOW_VARIANCE:{name:'Необычно одинаковые оценки',found:'Разброс оценок этой недели',baseline:'Разброс оценок прошлой недели',explain:'Стандартное отклонение итоговых баллов стало необычно маленьким по сравнению с предыдущей неделей.',action:'Проверить динамику оценок и число ответов; сам по себе признак не доказывает манипуляцию.',format:'score'},
+ REPEATED_FINGERPRINT:{name:'Похожие анкеты за короткое время',found:'Похожих анкет за 10 минут',baseline:'Контрольный минимум',explain:'За короткий интервал много анкет содержали одинаковые структурированные ответы.',action:'Проверить, не было ли одновременной отправки после занятия или дублирования ответов.',format:'count'},
+ SAME_TIMESTAMP_CLUSTER:{name:'Много анкет в одну секунду',found:'Анкет с одинаковой секундой',baseline:'Контрольный минимум',explain:'У нескольких анкет совпадает время отправки с точностью до секунды.',action:'Проверить экспорт отметок времени и возможную пакетную отправку.',format:'count'},
+ FORMAT_SHIFT:{name:'Изменилось соотношение онлайн и офлайн',found:'Доля онлайн сейчас',baseline:'Доля онлайн раньше',explain:'Доля онлайн-занятий среди анкет сильно изменилась по сравнению с предыдущей неделей.',action:'Проверить, действительно ли менялся формат занятий.',format:'percentage'},
+ RANK_DENSITY:{name:'Место изменилось при близком балле',found:'Текущее место школы',baseline:'Прошлое место школы',explain:'Место школы в рейтинге существенно изменилось, хотя средний балл изменился незначительно.',action:'Проверить плотность баллов соседних школ; это не ошибка и не жалоба.',format:'rank'},
+ LEADER_NEAR_THRESHOLD:{name:'Лидер близок к порогу анкет',found:'Анкет у школы',baseline:'Минимум для рейтинга',explain:'Школа находится среди лидеров, но число анкет ненамного превышает необходимый минимум.',action:'Оценивать место с учётом объёма выборки.',format:'count'},
+ DROPPED_BY_THRESHOLD:{name:'Школа ниже нового порога рейтинга',found:'Анкет у школы',baseline:'Текущий минимум для рейтинга',explain:'Порог количества анкет для общего рейтинга вырос, и школе теперь недостаточно ответов для официального места.',action:'Уточнить сбор обратной связи; снижение места само по себе не означает ухудшения занятий.',format:'count'}
+};
+function dqSchool(s){if(!s.schoolId)return '<b>Весь поток / источник</b>';const d=state.data.schools?.[String(s.schoolId)]||state.data.schools?.[s.schoolId]||(state.data.participantSignals?.cup?.allSchools||[]).find(x=>Number(x.schoolId)===Number(s.schoolId));return d?`<b>№${esc(s.schoolId)} · ${esc(d.displayName||'Школа')}</b><span class="leader">${esc(d.leaderName||'')}</span>`:`<b>Школа №${esc(s.schoolId)}</b>`}
+function diagnosticType(s){return diagnosticTypes[s.code]||{name:s.title||s.code||'Диагностическая проверка',found:'Выявленное значение',baseline:'Контрольный ориентир',explain:'Автоматическая проверка выявила значение, требующее дополнительного контекста.',action:'Проверить источник и условия появления показателя.',format:'text'}}
+function dqVal(v,fmt,hasValue=true){if(!hasValue||v==null||v==='')return 'Нет данных для сравнения';const n=Number(v),numeric=typeof v==='number'||(typeof v==='string'&&v.trim()!==''&&Number.isFinite(n));if(fmt==='variants'&&numeric)return nfmt(n)+' '+plural(n,'вариант','варианта','вариантов');if(fmt==='week'&&numeric)return 'Неделя №'+nfmt(n);if(fmt==='rank'&&numeric)return 'Место №'+nfmt(n);if(fmt==='days'&&numeric)return nfmt(n)+' '+plural(n,'день','дня','дней');if(fmt==='days1'&&numeric)return Number(n).toLocaleString('ru-RU',{maximumFractionDigits:1})+' дн.';if(fmt==='percentage'&&numeric)return Number(n).toLocaleString('ru-RU',{maximumFractionDigits:1,minimumFractionDigits:1})+'%';if(fmt==='score'&&numeric)return Number(n).toLocaleString('ru-RU',{maximumFractionDigits:3});if(fmt==='count'&&numeric)return nfmt(n)+' '+plural(n,'анкета','анкеты','анкет');if(numeric)return nfmt(n);return String(v)}
+function dqCaptionValue(v){return v==null||v===''?'Нет данных':String(v)}
+function diagnosticCountByCode(signals,code){return signals.filter(x=>x.code===code).length}
+function diagnosticCard(s){
+ const t=diagnosticType(s),hasBase=s.baseline!==null&&s.baseline!==undefined&&s.baseline!=='';
+ const baseVal=hasBase?dqVal(s.baseline,t.format):'Нет данных для сравнения';
+ const name=s.schoolId?dqSchool(s):'<b>Весь поток / источник</b>';
+ const lvl=s.level==='error'?'Ошибка':s.level==='warning'?'Проверить':'Информация';
+ const label=s.week!=null?'Неделя №'+nfmt(s.week):'Проверка не привязана к отдельной неделе';
+ const fmt=t.format;
+ let obs=dqVal(s.observed,fmt),baseline=baseVal,foundLabel=t.found,baseLabel=t.baseline;
+ if(s.code==='BURST_RESPONSES'&&!hasBase){baseLabel='Сравнение с прошлыми неделями';baseline='Пока нет данных прошлых недель (действует абсолютный порог)'}
+ if(s.code==='NEW_SCHOOL_ID'){obs=dqVal(s.observed,'week');baseline=dqVal(s.baseline,'week')}
+ if(s.code==='NO_RECENT_RESPONSES'){obs=dqVal(s.observed,'days');baseline=dqVal(s.baseline,'days')}
+ const technical=`Код проверки: ${esc(s.code||'—')}${s.sampleSize!=null?' · Число анкет в выборке: '+nfmt(s.sampleSize):''}`;
+ return `<article class="dq-card"><div class="dq-card-top"><h4>${esc(t.name)}</h4><span class="level ${esc(s.level||'info')}">${lvl}</span></div><div class="dq-card-school">${name}</div><div class="dq-card-values"><div class="dq-card-value"><div class="dt">${esc(foundLabel)}</div><div class="dd ${String(obs).length>24?'long':''}">${esc(obs)}</div></div><div class="dq-card-value"><div class="dt">${esc(baseLabel)}</div><div class="dd ${String(baseline).length>24?'long':''}">${esc(baseline)}</div></div></div><p class="dq-card-explain">${esc(t.explain)}</p><p class="dq-card-next"><b>Что проверить:</b> ${esc(t.action)}</p><div class="dq-card-period">${esc(label)}</div><details><summary>Технические детали</summary><p>${technical}</p></details></article>`
+}
+function isOrdinaryWeekTwoStart(s){if(s.code!=='NEW_SCHOOL_ID')return false;const raw=s.observed;const text=typeof raw==='number'?String(raw):String(raw??'').trim();return /^(?:недел(?:я|и)\s*[№#]?\s*)?2$/i.test(text)}
+function visibleQualityRows(q){return(q?.signals||[]).filter(s=>!isOrdinaryWeekTwoStart(s))}
+function qualityFilteredRows(){const q=visibleQualityRows(state.data.dataQuality);return q.filter(s=>(state.dqCode==='all'||s.code===state.dqCode)).sort((a,b)=>({error:0,warning:1,info:2}[a.level]??3)-({error:0,warning:1,info:2}[b.level]??3)||String(a.code||'').localeCompare(String(b.code||''),'ru')||Number(a.schoolId||0)-Number(b.schoolId||0))}
+function renderDqCards(){const box=document.getElementById('dqCards');if(!box)return;const rows=qualityFilteredRows();document.getElementById('dqResults').textContent=`Найдено ${nfmt(rows.length)} ${plural(rows.length,'диагностическая ситуация','диагностические ситуации','диагностических ситуаций')}`;box.innerHTML=rows.length?rows.map(diagnosticCard).join(''):'<div class="empty">По выбранному типу проверок ничего не найдено. Выберите другой тип.</div>'}
+function qualityGlossary(signals){const codes=[...new Set(signals.map(s=>s.code))].sort((a,b)=>diagnosticType({code:a}).name.localeCompare(diagnosticType({code:b}).name,'ru'));return `<details class="dq-glossary"><summary>Что означают типы проверок? Справочник (${codes.length})</summary><div class="dq-glossary-list">${codes.map(code=>{const t=diagnosticType({code});return `<div class="dq-glossary-item"><b>${esc(t.name)}</b><p>${esc(t.explain)}</p><p><b>Что проверить:</b> ${esc(t.action)}</p></div>`}).join('')}</div></details>`}
+function renderQuality(){
+ const q=state.data.dataQuality||{signals:[],structure:{}},all=visibleQualityRows(q),el=document.getElementById('view-quality');
+ const codes=[...new Set(all.map(s=>s.code))].sort((a,b)=>diagnosticType({code:a}).name.localeCompare(diagnosticType({code:b}).name,'ru'));
+ if(state.dqCode!=='all'&&!codes.includes(state.dqCode))state.dqCode='all';
+ const visibleCounts={error:all.filter(s=>s.level==='error').length,warning:all.filter(s=>s.level==='warning').length,info:all.filter(s=>s.level==='info').length};
+ // Data-quality sourceRow checks include rows with an unrecognized flow; these cannot be attributed to flow 40 alone.
+ const invalid=q.structure?.invalidRows,parse=q.structure?.schoolParseErrors,auditReady=q.structure?.schoolParseAuditVersion==='effective-rows-by-flow-v1';
+ el.innerHTML=`<div class="dq-intro"><strong>Это не жалобы учеников на рекламу.</strong> Здесь автоматические проверки структуры анкет, активности ответов, оценок и рейтинга. Необычный показатель — повод разобраться, а не доказательство нарушения.</div><div class="dq-kpis"><div class="card dq-kpi"><div class="dq-kpi-title">Ошибки проверки</div><div class="n">${nfmt(visibleCounts.error)}</div><div class="dq-kpi-desc">Обнаруженные критические признаки</div></div><div class="card dq-kpi"><div class="dq-kpi-title">Нужно проверить</div><div class="n">${nfmt(visibleCounts.warning)}</div><div class="dq-kpi-desc">Ситуации, заслуживающие внимания</div></div><div class="card dq-kpi"><div class="dq-kpi-title">Информация</div><div class="n">${nfmt(visibleCounts.info)}</div><div class="dq-kpi-desc">Наблюдения, не обязательно ошибки</div></div><div class="card dq-kpi"><div class="dq-kpi-title">Проверка исходных строк</div><div class="n">${auditReady&&invalid!=null?nfmt(invalid):'—'}</div><div class="dq-kpi-desc">${auditReady?'Анкеты с замечаниями, относящиеся к потоку 40':'Ожидается проверенный пересчёт исходных строк'}</div></div></div>${auditReady?`<details class="dq-structure"><summary>Как проверяется распознавание школы?</summary><div class="raw-numbers"><span>Строк с замечаниями в потоке 40: <b>${invalid==null?'—':nfmt(invalid)}</b></span><span>Из них анкет с нераспознанным номером школы: <b>${parse==null?'—':nfmt(parse)}</b></span></div><p>Учитываются только непустые строки анкет, в которых удалось определить поток 40. Пустые технические строки и строки без распознанного номера потока исключены. Значения получены после исправленного пересчёта Apps Script.</p></details>`:`<div class="dq-audit-pending" role="status"><b>Проверка распознавания школы временно скрыта.</b> Обнаружена ошибка прежнего алгоритма: пустые строки могли учитываться как анкеты с нераспознанным номером школы. До исправленного пересчёта эти показатели не показываем, чтобы не вводить в заблуждение.</div>`}<div class="dq-quality-head"><h3>Диагностические проверки</h3><p>Выберите тип проверки, чтобы увидеть все школы с одинаковым признаком. Каждая карточка поясняет единицы измерения и ориентир для сравнения.</p></div>${qualityGlossary(all)}<div class="dq-filters"><label class="dq-field"><span>Что проверяем</span><select id="dqCode" class="select"><option value="all">Все типы проверок</option>${codes.map(code=>`<option value="${esc(code)}">${esc(diagnosticType({code}).name)}</option>`).join('')}</select></label></div><div id="dqResults" class="dq-result-count" aria-live="polite"></div><div class="dq-cards" id="dqCards"></div>`;
+ el.querySelector('#dqCode').value=state.dqCode||'all';
+ el.querySelector('#dqCode').onchange=e=>{state.dqCode=e.target.value;renderDqCards()};
+ renderDqCards();
+}
+
+function renderMethod(){const d=state.data,detail=d.config?.signalDetailVersion;document.getElementById('view-method').innerHTML=`<div class="hero"><h2>Как читать отметки</h2><p>Короткое пояснение терминов и расчётов сайта №2.</p></div><div class="card method"><h3>Что считается отметкой</h3><p><b>Отметка</b> — анкета, где участник отметил хотя бы один из двух пунктов: просьбу подписаться на соцсети или наличие скрытой / явной рекламы, продажи продукта, услуги или сервиса. Если в одной анкете отмечены оба пункта, это всё равно одна анкета с отметкой.</p><h3>Зачем нужна разбивка по занятиям</h3><p>Общее число за поток может скрывать концентрацию в конкретный день. Поэтому рядом со школой показываются занятия и количество отметок на каждом из них. Это позволяет быстро увидеть, например: «на занятиях 1 и 2 было по пять отметок, дальше — единичные».</p><h3>Что означает «доля»</h3><p>Доля = число анкет с отметкой / все анкеты этой школы или занятия. Поэтому одинаковые пять отметок могут иметь разный вес при 20 и при 200 ответах.</p><h3>Это не рейтинг и не автоматическое нарушение</h3><p>Отметки <b>не влияют на рейтинг школы</b>. Они показывают, куда руководителю стоит посмотреть. Решение о том, была ли проблема, принимается после проверки контекста.</p><h3>Каких данных здесь нет</h3><p>Сайт не публикует текстовые комментарии и персональные ответы участников. Сейчас используются только агрегированные ответы на структурированные вопросы.</p><div class="rules"><div class="rule"><b>Период:</b><br>весь текущий поток</div><div class="rule"><b>Детализация:</b><br>${detail?'по занятиям включена':'нужно обновление API для разбивки по занятиям'}</div></div></div>`}
+
+function render(){document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.view===state.tab));document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id==='view-'+state.tab));if(!state.data)return;if(state.tab==='signals')renderSignals();if(state.tab==='quality')renderQuality();if(state.tab==='method')renderMethod();bindTips(document)}
+function bind(){document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{state.tab=b.dataset.view;render()});bindTips(document)}
+async function load(){
+ const d=await loadLiveData();
+ if(d.schemaVersion!=='1.5'||d.view!=='signals')throw new Error('Несовместимый API: '+d.schemaVersion+'/'+d.view);
+ state.data=d;
+ const from=d.flow?.flowStart,to=String(d.meta?.sourceLastResponseAt||'').slice(0,10);
+ document.getElementById('flowChip').textContent=`Поток ${d.flow.id} · ${dateRu(from)} — ${dateRu(to)}`;
+ document.getElementById('updated').innerHTML=liveStatus(d);
+ bindStatusInfo();bind();render();
+}
+load().catch(showLoadError);
+</script>
+</body>
+</html>

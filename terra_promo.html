@@ -115,7 +115,7 @@ button{cursor:pointer}
 .summary-head h3{margin:0;font-size:16px;line-height:22px;font-weight:700}
 .summary-head p{display:none}
 .kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-.card,.kpi,.dq-kpi{min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);box-shadow:var(--shadow-card)}
+.card,.kpi{min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);box-shadow:var(--shadow-card)}
 .kpi{padding:12px}.kpi:last-child{grid-column:1/-1}
 .kpi .label{color:var(--ink-2);font-size:11px;line-height:14px;font-weight:500}
 .kpi .value{margin-top:4px;color:var(--ink);font-size:20px;line-height:24px;font-weight:700;font-variant-numeric:tabular-nums}
@@ -155,8 +155,6 @@ button{cursor:pointer}
 .mobile-lesson.unknown-row{color:var(--ink-3)}.desktop-lessons{display:none}
 .sectionhead{margin:24px 0 8px}.sectionhead h3{margin:0;font-size:16px;line-height:22px;font-weight:700}
 .sectionhead p{margin:4px 0 0;color:var(--ink-2);font-size:12px;line-height:16px}
-.dq-kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.dq-kpi{padding:12px}
-.dq-kpi .n{margin-top:8px;font-size:20px;line-height:24px;font-weight:700;font-variant-numeric:tabular-nums}
 .level{display:inline-block;padding:4px 8px;background:var(--surface-2);border-radius:var(--r-tag);color:var(--ink-2);font-size:11px;line-height:14px;font-weight:600}
 .level.error{color:var(--bad)}.level.warning{color:var(--heat-2-fg)}.level.ok{color:var(--green)}
 .tablewrap{max-width:100%;overflow-x:auto}.dq-table{border-collapse:collapse;width:100%;min-width:720px}
@@ -220,12 +218,7 @@ button{cursor:pointer}
 .help-pop b{color:inherit}
 .dq-intro{margin:12px 0 16px;max-width:850px;color:var(--ink-2);font-size:13px;line-height:19px}
 .dq-intro strong{color:var(--ink)}
-.dq-kpis{grid-template-columns:repeat(3,minmax(0,1fr))}
-.dq-kpi{padding:12px}
-.dq-kpi .dq-kpi-title{font-size:12px;line-height:16px;color:var(--ink-2);font-weight:600}
-.dq-kpi .dq-kpi-desc{margin-top:4px;font-size:11px;line-height:16px;color:var(--ink-2)}
-.dq-kpi .n{font-variant-numeric:tabular-nums}
-.dq-quality-head{margin:24px 0 12px}
+.dq-quality-head{margin:16px 0 12px}
 .dq-quality-head h3{font-size:16px;line-height:22px;margin:0 0 4px}
 .dq-quality-head p{font-size:12px;line-height:17px;color:var(--ink-2);margin:0}
 .dq-filters{display:block;max-width:420px;margin-bottom:8px}
@@ -262,7 +255,7 @@ button{cursor:pointer}
 .dq-glossary-item b{font-size:13px;line-height:18px}
 .dq-glossary-item p{margin:4px 0 0;color:var(--ink-2);font-size:12px;line-height:18px}
 @media(max-width:639px){.dq-levels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));overflow:visible}.dq-levels button{min-width:0;white-space:normal}}
-@media(min-width:640px){.dq-kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.dq-filters{grid-template-columns:repeat(3,minmax(0,1fr))}.dq-levels{grid-column:1/-1}}
+@media(min-width:640px){.dq-filters{grid-template-columns:repeat(3,minmax(0,1fr))}.dq-levels{grid-column:1/-1}}
 @media(min-width:768px){.dq-cards,.dq-glossary-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(min-width:1200px){.dq-field .select,.dq-field .input{height:40px;font-size:14px;line-height:20px}.dq-levels button{min-height:40px}.dq-filters{grid-template-columns:1fr 1fr 1fr}.dq-cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
@@ -322,7 +315,7 @@ button{cursor:pointer}
   .lesson-head-label{margin-bottom:4px}
 }
 
-@media(max-width:639px){.dq-kpis>.dq-kpi:last-child:nth-child(odd){grid-column:1/-1}}
+@media(max-width:639px){}
 </style>
 </head>
 <body>
@@ -616,9 +609,7 @@ function renderQuality(){
  const q=state.data.dataQuality||{signals:[],structure:{}},all=visibleQualityRows(q),el=document.getElementById('view-quality');
  const codes=[...new Set(all.map(s=>s.code))].sort((a,b)=>diagnosticType({code:a}).name.localeCompare(diagnosticType({code:b}).name,'ru'));
  if(state.dqCode!=='all'&&!codes.includes(state.dqCode))state.dqCode='all';
- const visibleCounts={error:all.filter(s=>s.level==='error').length,warning:all.filter(s=>s.level==='warning').length,info:all.filter(s=>s.level==='info').length};
- // Data-quality sourceRow checks include rows with an unrecognized flow; these cannot be attributed to flow 40 alone.
- el.innerHTML=`<div class="dq-intro"><strong>Это не жалобы учеников на рекламу.</strong> Здесь автоматические проверки структуры анкет, активности ответов, оценок и рейтинга. Необычный показатель — повод разобраться, а не доказательство нарушения.</div><div class="dq-kpis"><div class="card dq-kpi"><div class="dq-kpi-title">Ошибки проверки</div><div class="n">${nfmt(visibleCounts.error)}</div><div class="dq-kpi-desc">Обнаруженные критические признаки</div></div><div class="card dq-kpi"><div class="dq-kpi-title">Нужно проверить</div><div class="n">${nfmt(visibleCounts.warning)}</div><div class="dq-kpi-desc">Ситуации, заслуживающие внимания</div></div><div class="card dq-kpi"><div class="dq-kpi-title">Информация</div><div class="n">${nfmt(visibleCounts.info)}</div><div class="dq-kpi-desc">Наблюдения, не обязательно ошибки</div></div></div><div class="dq-quality-head"><h3>Диагностические проверки</h3><p>Выберите тип проверки, чтобы увидеть все школы с одинаковым признаком. Каждая карточка поясняет единицы измерения и ориентир для сравнения.</p></div>${qualityGlossary(all)}<div class="dq-filters"><label class="dq-field"><span>Что проверяем</span><select id="dqCode" class="select"><option value="all">Все типы проверок</option>${codes.map(code=>`<option value="${esc(code)}">${esc(diagnosticType({code}).name)}</option>`).join('')}</select></label></div><div id="dqResults" class="dq-result-count" aria-live="polite"></div><div class="dq-cards" id="dqCards"></div>`;
+ el.innerHTML=`<div class="dq-intro"><strong>Это не жалобы учеников на рекламу.</strong> Здесь автоматические проверки структуры анкет, активности ответов, оценок и рейтинга. Необычный показатель — повод разобраться, а не доказательство нарушения.</div><div class="dq-quality-head"><h3>Диагностические проверки</h3><p>Выберите тип проверки, чтобы увидеть все школы с одинаковым признаком. Каждая карточка поясняет единицы измерения и ориентир для сравнения.</p></div>${qualityGlossary(all)}<div class="dq-filters"><label class="dq-field"><span>Что проверяем</span><select id="dqCode" class="select"><option value="all">Все типы проверок</option>${codes.map(code=>`<option value="${esc(code)}">${esc(diagnosticType({code}).name)}</option>`).join('')}</select></label></div><div id="dqResults" class="dq-result-count" aria-live="polite"></div><div class="dq-cards" id="dqCards"></div>`;
  el.querySelector('#dqCode').value=state.dqCode||'all';
  el.querySelector('#dqCode').onchange=e=>{state.dqCode=e.target.value;renderDqCards()};
  renderDqCards();

@@ -9,6 +9,8 @@
     />
     <title>Дагестан без суеты — авторские путешествия</title>
     <style>
+      @import url("https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap");
+
       :root {
         --ink: #172019;
         --paper: #f5f0e6;
@@ -19,6 +21,7 @@
         --line: rgb(23 32 25 / 18%);
         --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
         --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        --display: "Manrope", Inter, ui-sans-serif, system-ui, sans-serif;
       }
 
       * { box-sizing: border-box; }
@@ -122,16 +125,18 @@
         animation: scale-in 1.6s cubic-bezier(.2,.7,.2,1) both;
       }
       .hero-inner { position: relative; z-index: 2; width: 100%; padding: 0 0 clamp(48px, 9vh, 102px); }
+      .site-header .container,
+      .hero .container { width: min(100% - clamp(48px, 8vw, 128px), 1280px); }
       .hero-copy { max-width: 760px; }
       .hero .eyebrow { color: rgb(255 253 247 / 84%); }
       .hero h1 {
-        max-width: 720px;
+        max-width: 810px;
         margin: 18px 0 18px;
-        font-family: var(--serif);
-        font-size: clamp(52px, 7.1vw, 108px);
-        font-weight: 400;
-        letter-spacing: -.07em;
-        line-height: .88;
+        font-family: var(--display);
+        font-size: clamp(50px, 6.6vw, 104px);
+        font-weight: 800;
+        letter-spacing: -.075em;
+        line-height: .92;
       }
       .hero h1 .accent { color: #edb079; }
       .hero-description { max-width: 440px; margin: 0 0 30px; color: rgb(255 253 247 / 84%); font-size: 17px; }
@@ -300,6 +305,8 @@
 
       @media (max-width: 760px) {
         .container { width: min(100% - 32px, 1240px); }
+        .site-header .container,
+        .hero .container { width: calc(100% - 48px); }
         .nav { min-height: 72px; }
         .nav-links {
           position: absolute;
